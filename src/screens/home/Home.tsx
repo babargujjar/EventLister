@@ -3,8 +3,9 @@ import React from 'react';
 import filter from '../../assets/images/Filter.png';
 import search from '../../assets/images/Search.png';
 import concert from '../../assets/images/concert.jpeg';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Home = () => {
+const Home = ({navigation}:any) => {
   return (
     <ScrollView style={Style.container}>
       <View style={{marginHorizontal: 20}}>
@@ -33,7 +34,9 @@ const Home = () => {
           <Text style={Style.ongoingtext}>On Going Events</Text>
           <Text style={Style.ongoingtext2}>see all</Text>
         </View>
-        <View style={Style.mianview}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('EventDetail')}
+          style={Style.mianview}>
           <View style={Style.imgview}>
             <Image
               style={{
@@ -113,12 +116,16 @@ const Home = () => {
               </Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={Style.ongoing}>
           <Text style={Style.ongoingtext}>Other Event</Text>
           <Text style={Style.ongoingtext2}>see all</Text>
         </View>
-        <View style={Style.map}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('EventDetail');
+          }}
+          style={Style.map}>
           <View style={Style.innermap}>
             <Image
               style={{width: 88, height: 88, borderRadius: 12, marginRight: 12}}
@@ -131,91 +138,7 @@ const Home = () => {
               <Text style={Style.mapbutton}>Price</Text>
             </View>
           </View>
-        </View>
-        <View style={Style.map}>
-          <View style={Style.innermap}>
-            <Image
-              style={{width: 88, height: 88, borderRadius: 12, marginRight: 12}}
-              source={concert}
-            />
-            <View style={Style.mapcontent}>
-              <Text style={Style.maptexts}>Workshop</Text>
-              <Text style={Style.mapmaintitle}>Framer Workshop</Text>
-              <Text style={Style.maptexts}>Date</Text>
-              <Text style={Style.mapbutton}>Price</Text>
-            </View>
-          </View>
-        </View>
-        <View style={Style.map}>
-          <View style={Style.innermap}>
-            <Image
-              style={{width: 88, height: 88, borderRadius: 12, marginRight: 12}}
-              source={concert}
-            />
-            <View style={Style.mapcontent}>
-              <Text style={Style.maptexts}>Workshop</Text>
-              <Text style={Style.mapmaintitle}>Framer Workshop</Text>
-              <Text style={Style.maptexts}>Date</Text>
-              <Text style={Style.mapbutton}>Price</Text>
-            </View>
-          </View>
-        </View>
-        <View style={Style.map}>
-          <View style={Style.innermap}>
-            <Image
-              style={{width: 88, height: 88, borderRadius: 12, marginRight: 12}}
-              source={concert}
-            />
-            <View style={Style.mapcontent}>
-              <Text style={Style.maptexts}>Workshop</Text>
-              <Text style={Style.mapmaintitle}>Framer Workshop</Text>
-              <Text style={Style.maptexts}>Date</Text>
-              <Text style={Style.mapbutton}>Price</Text>
-            </View>
-          </View>
-        </View>
-        <View style={Style.map}>
-          <View style={Style.innermap}>
-            <Image
-              style={{width: 88, height: 88, borderRadius: 12, marginRight: 12}}
-              source={concert}
-            />
-            <View style={Style.mapcontent}>
-              <Text style={Style.maptexts}>Workshop</Text>
-              <Text style={Style.mapmaintitle}>Framer Workshop</Text>
-              <Text style={Style.maptexts}>Date</Text>
-              <Text style={Style.mapbutton}>Price</Text>
-            </View>
-          </View>
-        </View>
-        <View style={Style.map}>
-          <View style={Style.innermap}>
-            <Image
-              style={{width: 88, height: 88, borderRadius: 12, marginRight: 12}}
-              source={concert}
-            />
-            <View style={Style.mapcontent}>
-              <Text style={Style.maptexts}>Workshop</Text>
-              <Text style={Style.mapmaintitle}>Framer Workshop</Text>
-              <Text style={Style.maptexts}>Date</Text>
-              <Text style={Style.mapbutton}>Price</Text>
-            </View>
-          </View>
-        </View>
-        <View style={Style.map}>
-          <View style={Style.innermap}>
-            <Image
-              style={{width: 88, height: 88, borderRadius: 12, marginRight: 12}}
-              source={concert}
-            />
-            <View style={Style.mapcontent}>
-              <Text style={Style.maptexts}>Workshop</Text>
-              <Text style={Style.mapmaintitle}>Framer Workshop</Text>
-              <Text style={Style.maptexts}>Date</Text>
-              <Text style={Style.mapbutton}>Price</Text>
-            </View>
-          </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -225,12 +148,9 @@ export default Home;
 
 const Style = StyleSheet.create({
   container: {
-    // paddingRight:20,
-    // paddingLeft:20,
     backgroundColor: '#FFFFFF',
     color: '#171B2E',
     flexGrow: 1,
-    // marginBottom:150
     width: '100%'
   },
   resent: {
@@ -337,24 +257,16 @@ const Style = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: '#FFFFFF',
     elevation: 4,
-    borderWidth: 1,
-    borderColor: 'red',
     padding: 6,
-    // marginBottom:150
   },
   innermap: {
-    borderWidth: 1,
     height: 88,
     flex: 1,
     flexDirection: 'row',
   },
   mapcontent: {
-    // height:72,
     width: 190,
-    // width:'100%',
     margin: 8,
-    borderWidth: 1,
-    borderColor: 'red',
     position: 'relative',
   },
   maptexts: {

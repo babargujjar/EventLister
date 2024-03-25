@@ -2,15 +2,18 @@ import {View, Text, ScrollView, StyleSheet, Image} from 'react-native';
 import React from 'react';
 import arrowleft from '../../assets/images/arrow-left-white.png';
 import concert from '../../assets/images/concert.jpeg';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const TicketDetail = () => {
+const TicketDetail = ({navigation}:any) => {
   return (
     <ScrollView>
       <View style={Style.container}>
         <View style={Style.topview}>
-          <View style={Style.topimgview}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={Style.topimgview}>
             <Image style={{width: 24, height: 24}} source={arrowleft} />
-          </View>
+          </TouchableOpacity>
           <Text style={Style.topviewtext}>Detail Ticket</Text>
         </View>
         <View style={Style.mianview}>
@@ -45,7 +48,13 @@ const TicketDetail = () => {
               alignItems: 'center',
             }}>
             <View style={Style.emptyviewleft}></View>
-            <Text style={{borderBottomWidth:0.5,borderRadius:6,borderStyle:'dotted',width:200,}}></Text>
+            <Text
+              style={{
+                borderBottomWidth: 0.5,
+                borderRadius: 6,
+                borderStyle: 'dotted',
+                width: 200,
+              }}></Text>
             <View style={Style.emptyviewrigth}></View>
           </View>
           <View style={Style.barcode}></View>

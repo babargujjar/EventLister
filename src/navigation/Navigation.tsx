@@ -1,16 +1,16 @@
-// import { View, Text } from 'react-native'
-// import React from 'react'
-// import { createStackNavigator } from '@react-navigation/stack'
-// import { NavigationContainer } from '@react-navigation/native'
-   
-// const Stack = createStackNavigator()
+import { View, Text } from 'react-native'
+import React from 'react'
+import { NavigationContainer } from '@react-navigation/native';
+import StackNavigation from './stackNavigation/StackNavigation';
+import TabNavigation from './tabNavigation/TabNavigation';
 
-// const Navigation = () => {
-//   return 
-//   <NavigationContainer>
+const Navigation = () => {
+  return (
+    <NavigationContainer>
+      <StackNavigation />
+      <TabNavigation />
+    </NavigationContainer>
+  );
+}
 
-//   </NavigationContainer>
-
-// }
-
-// export default Navigation
+export default Navigation;

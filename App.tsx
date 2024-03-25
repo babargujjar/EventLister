@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React, {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 // import SignUp from './src/screens/signup/SignUp'
 // import Signin from './src/screens/signIn/SignIn'
@@ -8,19 +8,22 @@ import SplashScreen from 'react-native-splash-screen';
 // import TicketDetail from './src/screens/ticketDetail/TicketDetail';
 // import MyPosting from './src/screens/myPosting/MyPosting';
 // import CreateEvent from './src/screens/createEvent/CreateEvent';
-import {NavigationContainer} from "@react-navigation/native"
-import Tabs from './src/navigation/tabNavigation/TabNavigation';
-
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import Navigation from './src/navigation/Navigation';
+import { NavigationContainer } from '@react-navigation/native';
+import StackNavigation from './src/navigation/stackNavigation/StackNavigation';
 
 const App = () => {
-    useEffect(() => {
-      SplashScreen.hide();
-    }, []);
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   return (
-    <NavigationContainer>
-      <Tabs />
-    </NavigationContainer>
+    
+      <GestureHandlerRootView style={{flex: 1}}>
+        <StackNavigation />
+      </GestureHandlerRootView>
+    
   );
 };
 

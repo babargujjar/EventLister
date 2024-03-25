@@ -12,14 +12,14 @@ import concert from '../../assets/images/concert.jpeg';
 import map from '../../assets/images/map.jpeg';
 import mapicon from '../../assets/images/mapicon.png';
 
-const EventDetail = () => {
+const EventDetail = ({navigation}:any) => {
   return (
     <ScrollView>
       <View style={Style.container}>
         <View style={Style.topview}>
-          <View style={Style.topimgview}>
+          <TouchableOpacity onPress={()=>navigation.goBack()} style={Style.topimgview}>
             <Image style={{width: 24, height: 24}} source={arrowleft} />
-          </View>
+          </TouchableOpacity>
           <Text style={Style.topviewtext}>Event Details</Text>
         </View>
         <TouchableOpacity>
@@ -58,7 +58,9 @@ const EventDetail = () => {
             <Text>Direct map</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={Style.botton}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('TicketDetail')}
+          style={Style.botton}>
           <Text style={Style.bottontext}>Buy Ticket</Text>
         </TouchableOpacity>
       </View>
