@@ -1,7 +1,7 @@
 import {View, Text, ScrollView, StyleSheet, Image} from 'react-native';
 import React from 'react';
-import arrowleft from '../../assets/images/arrow-left-white.png';
-import concert from '../../assets/images/concert.jpeg';
+import arrowleft from '../../../assets/images/arrow-left-white.png';
+import concert from '../../../assets/images/concert.jpeg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const TicketDetail = ({navigation}:any) => {

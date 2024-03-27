@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import arrowleft from '../../assets/images/arrow-left.png';
-import concert from '../../assets/images/concert.jpeg';
-import map from '../../assets/images/map.jpeg';
-import mapicon from '../../assets/images/mapicon.png';
+import arrowleft from '../../../assets/images/arrow-left.png';
+import concert from '../../../assets/images/concert.jpeg';
+import map from '../../../assets/images/map.jpeg';
+import mapicon from '../../../assets/images/mapicon.png';
 
 const EventDetail = ({navigation}:any) => {
   return (

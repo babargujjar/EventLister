@@ -1,6 +1,6 @@
 import {View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Image,Button} from 'react-native';
 import React,{useState} from 'react';
-import Upload from "../../assets/images/Upload.png"
+import Upload from "../../../assets/images/Upload.png"
 import  {launchImageLibrary, ImagePickerResponse} from "react-native-image-picker"
 
 
@@ -22,7 +22,6 @@ const CreateEvent = () => {
         }
       });
     };
-    console.log('imageURI', imageURI)
 
   return (
     <ScrollView>

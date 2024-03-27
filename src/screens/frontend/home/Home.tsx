@@ -1,33 +1,50 @@
-import {View, Text, ScrollView, StyleSheet, Image} from 'react-native';
+import {View, Text, ScrollView, Image, StyleSheet} from 'react-native';
 import React from 'react';
-import filter from '../../assets/images/Filter.png';
-import search from '../../assets/images/Search.png';
-import concert from '../../assets/images/concert.jpeg';
+import filter from '../../../assets/images/Filter.png';
+import search from '../../../assets/images/Search.png';
+import concert from '../../../assets/images/concert.jpeg';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Card from '../../../components/card/Card';
 
-const SortedEvents = () => {
+const Home = ({navigation}:any) => {
   return (
     <ScrollView style={Style.container}>
       <View style={{marginHorizontal: 20}}>
         <View style={Style.resent}>
           <Text style={Style.resenttext}>Recent Events</Text>
-          <View style={Style.resentimgview}>
+          <View
+            style={{
+              width: 42,
+              height: 42,
+              padding: 10,
+              // elevation: 4,
+              borderWidth: 1,
+              borderRadius: 100,
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              borderColor: '#EFF0F9',
+            }}>
             <Image style={Style.resentimg} source={filter} />
           </View>
         </View>
         <View style={Style.inputview}>
           <Image style={{height: 24, width: 24}} source={search} />
-          <Text style={{color: '#171B2E', paddingLeft: 10}}>search...</Text>
+          <Text style={{color: '#171B2E'}}>search...</Text>
         </View>
         <View style={Style.ongoing}>
-          <Text style={Style.ongoingtext}>Events</Text>
+          <Text style={Style.ongoingtext}>On Going Events</Text>
+          <Text style={Style.ongoingtext2}>see all</Text>
         </View>
-        <View style={Style.mianview}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('EventDetail')}
+          style={Style.mianview}>
           <View style={Style.imgview}>
             <Image
               style={{
+                width: '100%',
+                height: '100%',
                 borderRadius: 16,
                 position: 'relative',
-                width: '100%',
               }}
               source={concert}
             />
@@ -37,6 +54,7 @@ const SortedEvents = () => {
                 <View>
                   <Text
                     style={{
+                      flex: 1,
                       fontWeight: '600',
                       fontSize: 14,
                       lineHeight: 18,
@@ -49,7 +67,7 @@ const SortedEvents = () => {
                   <View
                     style={{
                       height: 19,
-
+                      flex: 1,
                       flexDirection: 'row',
                       alignItems: 'center',
                       // borderWidth: 1,
@@ -88,54 +106,66 @@ const SortedEvents = () => {
                   Price
                 </Text>
               </View>
-              <View
+              <Text
                 style={{
+                  color: '#171B2E',
                   borderTopWidth: 1,
                   borderColor: '#EFF0F9',
                   paddingTop: 10,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
                 }}>
-                <Text style={{color: '#171B2E'}}>Participates</Text>
-                <Text style={{color: '#171B2E'}}>Date</Text>
-              </View>
+                Date
+              </Text>
             </View>
           </View>
+        </TouchableOpacity>
+        <View style={Style.ongoing}>
+          <Text style={Style.ongoingtext}>Other Event</Text>
+          <Text style={Style.ongoingtext2}>see all</Text>
         </View>
+        <TouchableOpacity activeOpacity={0.7}
+          onPress={() => {
+            navigation.navigate('EventDetail');
+          }}>
+          <Card />
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.7}
+          onPress={() => {
+            navigation.navigate('EventDetail');
+          }}>
+          <Card />
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.7}
+          onPress={() => {
+            navigation.navigate('EventDetail');
+          }}>
+          <Card />
+        </TouchableOpacity>
       </View>
+        
+      
     </ScrollView>
   );
 };
-export default SortedEvents;
 
+export default Home;
 
 const Style = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
     color: '#171B2E',
-    flex: 1,
-    // borderWidth: 2,
+    flexGrow: 1,
+    width: '100%'
   },
   resent: {
     color: '#171B2E',
     marginTop: 32,
-
+    flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 42,
     flexDirection: 'row',
     // width: 335,
   },
-  resentimgview:{
-              width: 42,
-              height: 42,
-              padding: 10,
-              borderWidth: 1,
-              borderRadius: 100,
-              paddingHorizontal: 10,
-              paddingVertical: 10,
-              borderColor: '#EFF0F9',
-            },
   resentimg: {
     width: 22,
     height: 22,
@@ -149,11 +179,11 @@ const Style = StyleSheet.create({
   inputview: {
     height: 52,
     borderRadius: 26,
-    // borderWidth: 1,
+    borderWidth: 1,
     // borderColor: '#FFFFFF',
     marginTop: 30,
-    // backgroundColor: '#FFFFFF',
-
+    backgroundColor: '#FFFFFF',
+    flex: 1,
     flexDirection: 'row',
     marginBottom: 30,
     alignItems: 'center',
@@ -161,7 +191,7 @@ const Style = StyleSheet.create({
   },
   ongoing: {
     height: 23,
-
+    flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
@@ -172,6 +202,14 @@ const Style = StyleSheet.create({
     fontSize: 18,
     lineHeight: 23,
     fontWeight: '600',
+  },
+  ongoingtext2: {
+    color: '#6F3DE9',
+    fontSize: 14,
+    lineHeight: 18,
+    fontWeight: '500',
+    height: 18,
+    width: 47,
   },
   mainimgbotton: {
     position: 'absolute',
@@ -211,10 +249,11 @@ const Style = StyleSheet.create({
     height: 45,
     // borderWidth: 1,
     // borderColor: 'red',
-
+    flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
   },
+
 });

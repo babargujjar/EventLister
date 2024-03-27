@@ -7,7 +7,7 @@ import {
   ScrollView,
   Image
 } from 'react-native';
-import img from '../../assets/images/Google.png';
+import img from '../../../assets/images/Google.png';
 import React, {useState} from 'react';
 
 const SignUp = () => {
