@@ -6,13 +6,15 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  ToastAndroid,
 } from 'react-native';
 import React, {useState} from 'react';
 import editimg from '../../../assets/images/Discoveryfocused.png';
 import {launchImageLibrary} from 'react-native-image-picker';
+  import auth from '@react-native-firebase/auth';
 
 const Profile = ({navigation}: any) => {
-  const [imageURI, setImageURI] = useState('');
+  const [imageURI, setImageURI] = useState<string>('');
 
 
   const handleSelectImage = () => {
@@ -29,23 +31,35 @@ const Profile = ({navigation}: any) => {
       }
     });
   };
+
+
+
+  const logout = ()=>{
+    
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
+  }
   return (
     <ScrollView>
       <View style={Style.container}>
         <View style={Style.headingview}>
           <Text style={Style.heading}>Profile Settings</Text>
-          <TouchableOpacity style={Style.logoutview}>
+          <TouchableOpacity style={Style.logoutview} onPress={logout}>
             <Text style={Style.logout}>Logout</Text>
           </TouchableOpacity>
         </View>
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <TouchableOpacity onPress={handleSelectImage} style={Style.imgview}>
-            {imageURI ? (
-              <Image style={{width:'100%',height:"100%"}} source={{uri: imageURI}} />
-            ) : (
-              <Image style={Style.editimg} source={editimg} />
-            )}
-          </TouchableOpacity>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>         
+            <TouchableOpacity onPress={handleSelectImage} style={Style.imgview}>
+              {imageURI ? (
+                <Image
+                  style={{width: '100%', height: '100%',borderRadius:71}}
+                  source={{uri: imageURI}}
+                />
+              ) : (
+                <Image style={Style.editimg} source={editimg} />
+              )}
+            </TouchableOpacity>
         </View>
         <View>
           <View style={Style.inputview}>
@@ -145,7 +159,6 @@ const Style = StyleSheet.create({
     borderRadius: 71,
     position: 'relative',
     marginBottom: 31,
-    overflow:'hidden'
   },
   editimg: {
     position: 'absolute',

@@ -5,42 +5,88 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Image
+  Image,
+  ToastAndroid
 } from 'react-native';
-import React, {useState} from 'react';
-import img from "../../assets/images/Google.png"
+import React, {useEffect, useState} from 'react';
+import img from "../../../assets/images/Google.png"
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
 
-const SignIn = () => {
-  //   const [nameState, setNameState] = useState('');
-  //   const inputHandler = (text: any) => {
-  //     setNameState(text);
-  //   };
-  //   const [emailState, setEmailState] = useState('');
-  //   const inputHandler = (text: any) => {
-  //     setNameState(text);
-  //   };
-  //   const [nameState, setEmailState] = useState('');
-  //   const inputHandler = (text: any) => {
-  //     setNameState(text);
-  //   };
+const SignIn = ({navigation}:any) => {
+
+   const [email,setEmail] = useState("")
+   const [password,setPassword] = useState("")
+   const [userInfo, setUserInfo]: any = useState(null);
+
+  useEffect(() => {
+    
+    GoogleSignin.configure({
+      webClientId:
+        '892470911449-gjd16tcofmgd710ds85i1fvlors4nca0.apps.googleusercontent.com',
+    });
+  }, []);
+
+  const signinemailandpassword =async ()=>{
+
+if ( !email || !password) {
+  ToastAndroid.show('Please enter all fields', ToastAndroid.SHORT);
+  return;
+}
+
+    await auth()
+      .signInWithEmailAndPassword(
+        email,
+        password,
+      )
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error("invalid Gmail or Password");
+      });
+  }
+console.log(password,email)
+  const googleSignIn = async () => {
+
+    try {
+     
+        await GoogleSignin.hasPlayServices({
+          showPlayServicesUpdateDialog: true,
+        });
+        
+        const {idToken} = await GoogleSignin.signIn();
+        console.log("id token",idToken)
+
+        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+console.log('googlecredintial', googleCredential);
+        const userData = await auth().signInWithCredential(googleCredential);
+        navigation.navigate('Home'); 
+        setUserInfo(userData)
+        // console.log(userData)
+        return userData;
+      
+    } catch (error) {
+      console.log("Somthing Went Wrong")
+    }
+   };
+  // console.log(userInfo)
   return (
     <ScrollView style={Styles.page}>
       <View>
         <Text style={Styles.heading}>Sign In</Text>
         <View>
-          {/* <View style={Styles.inputview}>
-            <Text style={Styles.nametext}>Name</Text>
-            <View>
-              <TextInput
-                style={Styles.input}
-                // defaultValue={nameState}
-                // value={nameState}
-                placeholder="Enter Name Here"
-                // onChangeText={inputHandler}
-                keyboardType="default"
-              />
-            </View>
-          </View> */}
           <View style={Styles.inputview}>
             <Text style={Styles.nametext}>Email</Text>
             <View>
@@ -50,6 +96,8 @@ const SignIn = () => {
                 placeholder="Enter Email Here"
                 // onChangeText={inputHandler}
                 keyboardType="email-address"
+                onChangeText={value => setEmail(value)}
+                value={email}
               />
             </View>
           </View>
@@ -58,6 +106,8 @@ const SignIn = () => {
             <View>
               <TextInput
                 style={Styles.input}
+                onChangeText={value => setPassword(value)}
+                value={password}
                 // defaultValue={state}
                 placeholder="Enter Password Here"
                 // onChangeText={inputHandler}
@@ -68,9 +118,16 @@ const SignIn = () => {
         </View>
         <Text style={Styles.alreadyaccount}>
           Don't have an account?{'  '}
-          <Text style={{color: '#6F3DE9'}}>SignUp Instead</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('SignUp');
+            }}>
+            <Text style={{color: '#6F3DE9'}}>SignUp Instead</Text>
+          </TouchableOpacity>
         </Text>
-        <TouchableOpacity style={Styles.button}>
+        <TouchableOpacity
+          style={Styles.button}
+          onPress={signinemailandpassword}>
           <Text style={Styles.text}>Sign In</Text>
         </TouchableOpacity>
         <View style={Styles.OR}>
@@ -88,7 +145,7 @@ const SignIn = () => {
               flex: 1,
             }}></View>
         </View>
-        <TouchableOpacity style={Styles.imgview}>
+        <TouchableOpacity style={Styles.imgview} onPress={googleSignIn}>
           <Image style={Styles.image} source={img} />
         </TouchableOpacity>
       </View>

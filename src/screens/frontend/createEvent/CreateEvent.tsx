@@ -2,9 +2,32 @@ import {View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Image,B
 import React,{useState} from 'react';
 import Upload from "../../../assets/images/Upload.png"
 import  {launchImageLibrary, ImagePickerResponse} from "react-native-image-picker"
+import firestore from "@react-native-firebase/firestore"
+import auth from "@react-native-firebase/auth"
 
 
 const CreateEvent = () => {
+  const [eventName,setEventName] = useState("")
+  const [price,setPrice] = useState("")
+  const [eventDate,setEventDate] = useState("")
+  const [eventLocation,setEventLocation] = useState("")
+  const [eventMapURL,setEventMapURL] = useState("")
+
+  const addDummyData = async () => {
+
+    // const uid = auth().currentUser()
+    try {
+      await firestore().collection('users/').add({
+        name: 'John Doe',
+        age: 30,
+        email: 'john@example.com',
+      });
+      console.log('Dummy data added successfully');
+    } catch (error) {
+      console.error('Error adding dummy data: ', error);
+    }
+  };
+
   const [imageURI, setImageURI] = useState('');
 // const UserData = useAppSelector(state => state.currentUser.user);
 
@@ -36,9 +59,12 @@ const CreateEvent = () => {
               <TextInput
                 style={Style.input}
                 // defaultValue={state}
-                placeholder="Enter Email Here"
+                placeholder="Enter Name"
                 // onChangeText={inputHandler}
                 keyboardType="default"
+                placeholderTextColor="#171B2E"
+                value={eventName}
+                onChangeText={(value)=>setEventName(value)}
               />
             </View>
           </View>
@@ -50,9 +76,10 @@ const CreateEvent = () => {
               <TextInput
                 style={Style.input}
                 // defaultValue={state}
-                placeholder="Enter Price Here"
+                placeholder="$ 0.00"
                 // onChangeText={inputHandler}
                 keyboardType="decimal-pad"
+                placeholderTextColor="#171B2E"
               />
             </View>
           </View>
@@ -64,9 +91,10 @@ const CreateEvent = () => {
               <TextInput
                 style={Style.input}
                 // defaultValue={state}
-                placeholder="Enter Price Here"
+                placeholder="Enter Event Date"
                 // onChangeText={inputHandler}
                 keyboardType="numeric"
+                placeholderTextColor="#171B2E"
               />
             </View>
           </View>
@@ -78,9 +106,10 @@ const CreateEvent = () => {
               <TextInput
                 style={Style.input}
                 // defaultValue={state}
-                placeholder="Enter Price Here"
+                placeholder="Event Location"
                 // onChangeText={inputHandler}
                 keyboardType="default"
+                placeholderTextColor="#171B2E"
               />
             </View>
           </View>
@@ -92,9 +121,10 @@ const CreateEvent = () => {
               <TextInput
                 style={Style.input}
                 // defaultValue={state}
-                placeholder="Enter Price Here"
+                placeholder="URL"
                 // onChangeText={inputHandler}
                 keyboardType="url"
+                placeholderTextColor="#171B2E"
               />
             </View>
           </View>
@@ -103,7 +133,10 @@ const CreateEvent = () => {
           <Text style={Style.nametext}>Event Media</Text>
           <TouchableOpacity onPress={handleSelectImage} style={Style.inputimg}>
             {imageURI ? (
-              <Image style={{zIndex:999,height:'100%',width:'100%'}} source={{uri: imageURI}} />
+              <Image
+                style={{zIndex: 999, height: '100%', width: '100%'}}
+                source={{uri: imageURI}}
+              />
             ) : (
               <>
                 <Image style={Style.upload} source={Upload} />
@@ -115,7 +148,7 @@ const CreateEvent = () => {
             )}
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={Style.botton}>
+        <TouchableOpacity onPress={addDummyData} style={Style.botton}>
           <Text style={Style.bottontext}>Publish Events</Text>
         </TouchableOpacity>
       </View>
