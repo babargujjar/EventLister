@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import { useAppDispatch,useAppSelector } from '../../../hooks/hooks';
 import { Signup,googleSignin } from '../../../store/authSlice';
 
 const SignUp = ({ navigation }: any) => {
+  
   const [name, setName]: any = useState('');
   const [email, setEmail]: any = useState('');
   const [password, setPassword]: any = useState('');
@@ -31,7 +32,10 @@ const signup =async ()=>{
      }
 
   } catch (error) {
-    console.log("slice not work")
+    ToastAndroid.show(
+      'server error please try again later',
+      ToastAndroid.SHORT,
+    );
   }
 }
 
@@ -39,7 +43,7 @@ const signup =async ()=>{
   const googleSignIn = async () => {
 dispatch(googleSignin());
   };
-  
+
   return (
     <ScrollView style={Styles.page}>
       <Text style={Styles.heading}>Sign Up</Text>

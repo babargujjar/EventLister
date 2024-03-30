@@ -13,35 +13,26 @@ import editimg from '../../../assets/images/Discoveryfocused.png';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useAppDispatch} from '../../../hooks/hooks';
 import {LogOut} from '../../../store/authSlice';
-// import { useAuth0 } from '@auth0/auth0-react';
-import auth from "@react-native-firebase/auth"
+import auth from '@react-native-firebase/auth';
+import firestore from "@react-native-firebase/firestore"
+
 
 const Profile = ({navigation}: any) => {
+
+
   const dispatch = useAppDispatch();
 
   const [imageURI, setImageURI] = useState<string>('');
-  const userData:any = auth()?.currentUser
+  const [displayName, setDisplayName] = useState<string>('');
+
+  const userData: any = auth()?.currentUser;
 
   useEffect(() => {
-    const fetchDownloadableURL = async () => {
-      try {
-        const imgurl = userData?.photoURL;
-        if (imgurl) {
-          console.log('imgurl', imgurl)
-          const downloadURL =
-            await imgurl.getDownloadURL();
-          setImageURI(downloadURL);
-          return downloadURL
-          // console.log('doenloadURL', downloadURL)
-        }else{console.log("else part")}
-      } catch (error) {
-        console.log('Error fetching download URL:');
-      }
-    };
-
-    fetchDownloadableURL();
+    if (userData) {
+      setDisplayName(userData.displayName || '');
+      setImageURI(userData.photoURL || '');
+    }
   }, []);
-  // console.log('userData.photoURL', userData.photoURL)
 
   const handleSelectImage = () => {
     launchImageLibrary({mediaType: 'photo'}, response => {
@@ -58,7 +49,46 @@ const Profile = ({navigation}: any) => {
     });
   };
 
-  const logout = () => {
+    const handleUpdateProfile = async () => {
+      try {
+        if (!userData) {
+          ToastAndroid.show('User data not available', ToastAndroid.SHORT);
+          return;
+        }
+
+        await userData.updateProfile({
+          displayName: displayName,
+          photoURL: imageURI,
+        });
+
+        const updatedUser = auth().currentUser;
+
+        if (updatedUser) {
+          await firestore()
+            .collection('user')
+            .doc(updatedUser.uid)
+            .update({
+              name: updatedUser.displayName,
+              email: updatedUser.email,
+              photoUrl: updatedUser.photoURL || null,
+              uid: updatedUser.uid,
+            });
+
+          ToastAndroid.show(
+            'Profile updated successfully!',
+            ToastAndroid.SHORT,
+          );
+        } else {
+          ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
+        }
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
+      }
+    };
+
+
+  const logout = async () => {
     dispatch(LogOut());
   };
 
@@ -76,7 +106,7 @@ const Profile = ({navigation}: any) => {
             {imageURI ? (
               <Image
                 style={{width: '100%', height: '100%', borderRadius: 71}}
-                source={{uri:imageURI}}
+                source={{uri: imageURI}}
               />
             ) : (
               <Image style={Style.editimg} source={editimg} />
@@ -89,7 +119,8 @@ const Profile = ({navigation}: any) => {
             <View>
               <TextInput
                 style={Style.input}
-                value={userData? userData.displayName : ""}
+                value={displayName}
+                onChangeText={setDisplayName}
                 // defaultValue={state}
                 placeholder="User Name"
                 placeholderTextColor="#171B2E"
@@ -99,14 +130,14 @@ const Profile = ({navigation}: any) => {
             </View>
           </View>
         </View>
-        
+
         <View>
           <View style={Style.inputview}>
             <Text style={Style.nametext}>Email</Text>
             <View>
               <TextInput
                 style={Style.input}
-                value={userData ? userData?.email : ""}
+                value={userData ? userData?.email : ''}
                 // defaultValue={state}
                 placeholder="Email"
                 placeholderTextColor="#171B2E"
@@ -116,7 +147,7 @@ const Profile = ({navigation}: any) => {
             </View>
           </View>
         </View>
-        <TouchableOpacity style={Style.botton}>
+        <TouchableOpacity style={Style.botton} onPress={handleUpdateProfile}>
           <Text style={(Style.bottontext, {color: '#FFFFFF'})}>
             Update Profile
           </Text>

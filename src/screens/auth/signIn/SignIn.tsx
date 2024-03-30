@@ -18,7 +18,6 @@ const SignIn = ({navigation}:any) => {
 
    const [email,setEmail] = useState("")
    const [password,setPassword] = useState("")
-   const [userInfo, setUserInfo]: any = useState(null);
 
   const dispatch = useAppDispatch()
   
@@ -31,7 +30,7 @@ const SignIn = ({navigation}:any) => {
         await dispatch(Signin({email, password}));
       }
     } catch (error) {
-      console.log('slice not work');
+      ToastAndroid.show('server error please try again later',ToastAndroid.SHORT);
     }
   };
  
@@ -40,7 +39,6 @@ const SignIn = ({navigation}:any) => {
      dispatch(googleSignin())
   
    };
-  // console.log(userInfo)
   return (
     <ScrollView style={Styles.page}>
       <View>
@@ -51,9 +49,7 @@ const SignIn = ({navigation}:any) => {
             <View>
               <TextInput
                 style={Styles.input}
-                // defaultValue={state}
                 placeholder="Enter Email Here"
-                // onChangeText={inputHandler}
                 keyboardType="email-address"
                 onChangeText={value => setEmail(value)}
                 value={email}
@@ -67,9 +63,7 @@ const SignIn = ({navigation}:any) => {
                 style={Styles.input}
                 onChangeText={value => setPassword(value)}
                 value={password}
-                // defaultValue={state}
                 placeholder="Enter Password Here"
-                // onChangeText={inputHandler}
                 secureTextEntry={true}
               />
             </View>
@@ -119,7 +113,6 @@ const Styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     color: '#171B2E',
     height: 812,
-    // width: 375,
     marginHorizontal: 'auto',
     paddingLeft: 20,
     paddingRight: 20,
@@ -173,7 +166,6 @@ const Styles = StyleSheet.create({
     borderRadius: 28,
     paddingTop: 15,
     paddingBottom: 15,
-    // objectFit:'cover',
     height: 52,
   },
   text: {

@@ -35,7 +35,10 @@ export const Signup = createAsyncThunk ("auth/Signup",async ({name,email,passwor
          auth().currentUser?.updateProfile({
            displayName: name,
          });
-         console.log("user created!")
+         ToastAndroid.show(
+           'User Created Successfully!',
+           ToastAndroid.SHORT,
+         );
       });
       const userDocs = firestore()
         .collection('user')
@@ -54,11 +57,11 @@ export const Signup = createAsyncThunk ("auth/Signup",async ({name,email,passwor
             })}
   } catch (error: any) {
     if (error.code === 'auth/email-already-in-use') {
-      console.log('That email address is already in use!');
+      ToastAndroid.show('That email address is already in use!',ToastAndroid.SHORT);
     } else if (error.code === 'auth/invalid-email') {
-      console.log('That email address is invalid!');
+      ToastAndroid.show('That email address is invalid!',ToastAndroid.SHORT);
     } else {
-      console.log('Something went wrong. Please try again.');
+      ToastAndroid.show('Something went wrong. Please try again.',ToastAndroid.SHORT);
     }
   }
 })
@@ -77,18 +80,21 @@ export const Signin = createAsyncThunk("auth/signin" ,async({email,password}:any
         password,
       )
       .then(() => {
-        console.log('User account created & signed in!');
+        ToastAndroid.show('User signedin Successfully!',ToastAndroid.SHORT);
       })
   } catch (error:any) {
 
     if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
+          ToastAndroid.show('This email address is already in use!',ToastAndroid.SHORT);
         }
 
         if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
+          ToastAndroid.show('Password and E-mail address is invalid!',ToastAndroid.SHORT);
         }else{
-          console.log("failed to signin please try again")}
+          ToastAndroid.show(
+            'Password and E-mail address is invalid!',
+            ToastAndroid.SHORT,
+          );}
   }
 })
 
