@@ -1,7 +1,14 @@
 import {configureStore} from '@reduxjs/toolkit';
+import { LogOut, Signin, Signup,googleSignin } from './authSlice';
+
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    SignIn : Signin ,
+    SignUp : Signup,
+    googleSignIn:googleSignin,
+    logOut :LogOut
+  },
 });
 
 

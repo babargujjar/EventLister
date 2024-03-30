@@ -8,14 +8,40 @@ import {
   TextInput,
   ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import editimg from '../../../assets/images/Discoveryfocused.png';
 import {launchImageLibrary} from 'react-native-image-picker';
-  import auth from '@react-native-firebase/auth';
+import {useAppDispatch} from '../../../hooks/hooks';
+import {LogOut} from '../../../store/authSlice';
+// import { useAuth0 } from '@auth0/auth0-react';
+import auth from "@react-native-firebase/auth"
 
 const Profile = ({navigation}: any) => {
-  const [imageURI, setImageURI] = useState<string>('');
+  const dispatch = useAppDispatch();
 
+  const [imageURI, setImageURI] = useState<string>('');
+  const userData:any = auth()?.currentUser
+
+  useEffect(() => {
+    const fetchDownloadableURL = async () => {
+      try {
+        const imgurl = userData?.photoURL;
+        if (imgurl) {
+          console.log('imgurl', imgurl)
+          const downloadURL =
+            await imgurl.getDownloadURL();
+          setImageURI(downloadURL);
+          return downloadURL
+          // console.log('doenloadURL', downloadURL)
+        }else{console.log("else part")}
+      } catch (error) {
+        console.log('Error fetching download URL:');
+      }
+    };
+
+    fetchDownloadableURL();
+  }, []);
+  // console.log('userData.photoURL', userData.photoURL)
 
   const handleSelectImage = () => {
     launchImageLibrary({mediaType: 'photo'}, response => {
@@ -32,14 +58,10 @@ const Profile = ({navigation}: any) => {
     });
   };
 
+  const logout = () => {
+    dispatch(LogOut());
+  };
 
-
-  const logout = ()=>{
-    
-    auth()
-      .signOut()
-      .then(() => console.log('User signed out!'));
-  }
   return (
     <ScrollView>
       <View style={Style.container}>
@@ -49,17 +71,17 @@ const Profile = ({navigation}: any) => {
             <Text style={Style.logout}>Logout</Text>
           </TouchableOpacity>
         </View>
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>         
-            <TouchableOpacity onPress={handleSelectImage} style={Style.imgview}>
-              {imageURI ? (
-                <Image
-                  style={{width: '100%', height: '100%',borderRadius:71}}
-                  source={{uri: imageURI}}
-                />
-              ) : (
-                <Image style={Style.editimg} source={editimg} />
-              )}
-            </TouchableOpacity>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <TouchableOpacity onPress={handleSelectImage} style={Style.imgview}>
+            {imageURI ? (
+              <Image
+                style={{width: '100%', height: '100%', borderRadius: 71}}
+                source={{uri:imageURI}}
+              />
+            ) : (
+              <Image style={Style.editimg} source={editimg} />
+            )}
+          </TouchableOpacity>
         </View>
         <View>
           <View style={Style.inputview}>
@@ -67,6 +89,7 @@ const Profile = ({navigation}: any) => {
             <View>
               <TextInput
                 style={Style.input}
+                value={userData? userData.displayName : ""}
                 // defaultValue={state}
                 placeholder="User Name"
                 placeholderTextColor="#171B2E"
@@ -76,12 +99,14 @@ const Profile = ({navigation}: any) => {
             </View>
           </View>
         </View>
+        
         <View>
           <View style={Style.inputview}>
             <Text style={Style.nametext}>Email</Text>
             <View>
               <TextInput
                 style={Style.input}
+                value={userData ? userData?.email : ""}
                 // defaultValue={state}
                 placeholder="Email"
                 placeholderTextColor="#171B2E"

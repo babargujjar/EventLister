@@ -10,11 +10,9 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import img from "../../../assets/images/Google.png"
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
+import { Signin, googleSignin } from '../../../store/authSlice';
+import {useAppDispatch} from '../../../hooks/hooks';
+
 
 const SignIn = ({navigation}:any) => {
 
@@ -22,64 +20,25 @@ const SignIn = ({navigation}:any) => {
    const [password,setPassword] = useState("")
    const [userInfo, setUserInfo]: any = useState(null);
 
-  useEffect(() => {
-    
-    GoogleSignin.configure({
-      webClientId:
-        '892470911449-gjd16tcofmgd710ds85i1fvlors4nca0.apps.googleusercontent.com',
-    });
-  }, []);
-
-  const signinemailandpassword =async ()=>{
-
-if ( !email || !password) {
-  ToastAndroid.show('Please enter all fields', ToastAndroid.SHORT);
-  return;
-}
-
-    await auth()
-      .signInWithEmailAndPassword(
-        email,
-        password,
-      )
-      .then(() => {
-        console.log('User account created & signed in!');
-      })
-      .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
-        }
-
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-        }
-
-        console.error("invalid Gmail or Password");
-      });
-  }
-console.log(password,email)
-  const googleSignIn = async () => {
-
+  const dispatch = useAppDispatch()
+  
+  const signin = async () => {
     try {
-     
-        await GoogleSignin.hasPlayServices({
-          showPlayServicesUpdateDialog: true,
-        });
-        
-        const {idToken} = await GoogleSignin.signIn();
-        console.log("id token",idToken)
-
-        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-console.log('googlecredintial', googleCredential);
-        const userData = await auth().signInWithCredential(googleCredential);
-        navigation.navigate('Home'); 
-        setUserInfo(userData)
-        // console.log(userData)
-        return userData;
-      
+      if (!email || !password) {
+        ToastAndroid.show('Please enter all fields', ToastAndroid.SHORT);
+        return;
+      } else {
+        await dispatch(Signin({email, password}));
+      }
     } catch (error) {
-      console.log("Somthing Went Wrong")
+      console.log('slice not work');
     }
+  };
+ 
+
+  const googleSignIn = () => {
+     dispatch(googleSignin())
+  
    };
   // console.log(userInfo)
   return (
@@ -127,7 +86,7 @@ console.log('googlecredintial', googleCredential);
         </Text>
         <TouchableOpacity
           style={Styles.button}
-          onPress={signinemailandpassword}>
+          onPress={signin}>
           <Text style={Styles.text}>Sign In</Text>
         </TouchableOpacity>
         <View style={Styles.OR}>
