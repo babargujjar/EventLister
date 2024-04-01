@@ -1,35 +1,100 @@
-import {View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Image,Button} from 'react-native';
+import {View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Image,Button, ToastAndroid} from 'react-native';
 import React,{useState} from 'react';
 import Upload from "../../../assets/images/Upload.png"
 import  {launchImageLibrary, ImagePickerResponse} from "react-native-image-picker"
 import firestore from "@react-native-firebase/firestore"
 import auth from "@react-native-firebase/auth"
+import { useAppDispatch } from '../../../hooks/hooks';
+import {UploadEvent} from '../../../store/createEventSlice';
 
+
+
+const initialEvent: any = {
+  eventName: '',
+  eventPrice: 0,
+  eventType: '',
+  eventLocation: '',
+  eventDate: new Date(),
+  eventMapUrl: '',
+  uid: '',
+  eventImage: '',
+  createdBy: {
+    email: '',
+    name: '',
+    uid: '',
+    photoURL: '',
+  },
+};
 
 const CreateEvent = () => {
+
   const [eventName,setEventName] = useState("")
   const [price,setPrice] = useState("")
   const [eventDate,setEventDate] = useState("")
   const [eventLocation,setEventLocation] = useState("")
   const [eventMapURL,setEventMapURL] = useState("")
-
-  const addDummyData = async () => {
-
-    // const uid = auth().currentUser()
-    try {
-      await firestore().collection('users/').add({
-        name: 'John Doe',
-        age: 30,
-        email: 'john@example.com',
-      });
-      console.log('Dummy data added successfully');
-    } catch (error) {
-      console.error('Error adding dummy data: ', error);
-    }
-  };
-
   const [imageURI, setImageURI] = useState('');
-// const UserData = useAppSelector(state => state.currentUser.user);
+  const  adminName = auth().currentUser?.displayName
+  const  adminPhoto = auth().currentUser?.photoURL
+  const  adminUid = auth().currentUser?.uid
+
+
+const Event = async () => {
+  try {
+    const eventData = {
+      eventName,
+      price,
+      eventDate,
+      eventLocation,
+      eventMapURL,
+      imageURI,
+      createdBy: {
+        adminName,
+        adminUid,
+        adminPhoto,
+      },
+    };
+
+    // Validate all fields
+    if (
+      !eventData.eventName ||
+      !eventData.price ||
+      !eventData.eventDate ||
+      !eventData.eventLocation ||
+      !eventData.eventMapURL ||
+      !eventData.imageURI ||
+      !eventData.createdBy.adminName ||
+      !eventData.createdBy.adminUid ||
+      !eventData.createdBy.adminPhoto
+    ) {
+      ToastAndroid.show('Please Enter all fields', ToastAndroid.SHORT);
+      return; // Return early if any field is missing
+    }
+
+    // Add event to Firestore
+    await firestore().collection('events').add({
+      EventName: eventData.eventName,
+      EventPrice: eventData.price,
+      EventDate: eventData.eventDate,
+      EventLocation: eventData.eventLocation,
+      EventMapURL: eventData.eventMapURL,
+      EventImage: eventData.imageURI,
+      EventAdminUid: eventData.createdBy.adminUid,
+      EventAdminName: eventData.createdBy.adminName,
+      EventAdminPhoto: eventData.createdBy.adminPhoto,
+    });
+
+    ToastAndroid.show('Event created successfully!', ToastAndroid.SHORT);
+    ()=>{initialEvent()}
+  } catch (error) {
+    console.error('Error creating event', error);
+    ToastAndroid.show('Error creating event', ToastAndroid.SHORT);
+  }
+};
+
+
+
+
 
     const handleSelectImage = () => {
       launchImageLibrary({mediaType: 'photo'}, response => {
@@ -58,13 +123,11 @@ const CreateEvent = () => {
             <View>
               <TextInput
                 style={Style.input}
-                // defaultValue={state}
                 placeholder="Enter Name"
-                // onChangeText={inputHandler}
                 keyboardType="default"
                 placeholderTextColor="#171B2E"
                 value={eventName}
-                onChangeText={(value)=>setEventName(value)}
+                onChangeText={value => setEventName(value)}
               />
             </View>
           </View>
@@ -75,9 +138,9 @@ const CreateEvent = () => {
             <View>
               <TextInput
                 style={Style.input}
-                // defaultValue={state}
+                onChangeText={value => setPrice(value)}
+                value={price}
                 placeholder="$ 0.00"
-                // onChangeText={inputHandler}
                 keyboardType="decimal-pad"
                 placeholderTextColor="#171B2E"
               />
@@ -90,10 +153,10 @@ const CreateEvent = () => {
             <View>
               <TextInput
                 style={Style.input}
-                // defaultValue={state}
-                placeholder="Enter Event Date"
-                // onChangeText={inputHandler}
-                keyboardType="numeric"
+                onChangeText={value => setEventDate(value)}
+                value={eventDate}
+                placeholder="Enter Event Date (dd Month yyyy)"
+                keyboardType="default"
                 placeholderTextColor="#171B2E"
               />
             </View>
@@ -105,9 +168,9 @@ const CreateEvent = () => {
             <View>
               <TextInput
                 style={Style.input}
-                // defaultValue={state}
+                onChangeText={value => setEventLocation(value)}
+                value={eventLocation}
                 placeholder="Event Location"
-                // onChangeText={inputHandler}
                 keyboardType="default"
                 placeholderTextColor="#171B2E"
               />
@@ -120,9 +183,9 @@ const CreateEvent = () => {
             <View>
               <TextInput
                 style={Style.input}
-                // defaultValue={state}
+                onChangeText={value => setEventMapURL(value)}
+                value={eventMapURL}
                 placeholder="URL"
-                // onChangeText={inputHandler}
                 keyboardType="url"
                 placeholderTextColor="#171B2E"
               />
@@ -148,13 +211,14 @@ const CreateEvent = () => {
             )}
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={addDummyData} style={Style.botton}>
+        <TouchableOpacity onPress={Event} style={Style.botton}>
           <Text style={Style.bottontext}>Publish Events</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
-};
+}
+
 
 export default CreateEvent;
 
