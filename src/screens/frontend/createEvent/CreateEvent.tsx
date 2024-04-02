@@ -68,10 +68,10 @@ const Event = async () => {
       !eventData.createdBy.adminPhoto
     ) {
       ToastAndroid.show('Please Enter all fields', ToastAndroid.SHORT);
-      return; // Return early if any field is missing
+      return; 
     }
 
-    // Add event to Firestore
+    
     await firestore().collection('events').add({
       EventName: eventData.eventName,
       EventPrice: eventData.price,

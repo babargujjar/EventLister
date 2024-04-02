@@ -1,29 +1,29 @@
-import { View, Text, Image, StyleSheet,TouchableOpacity } from 'react-native'
-import React from 'react'
-import concert from "../../assets/images/concert.jpeg"
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import React from 'react';
 
-const Card = () => {
+const Card = ({param}: any) => {
+
+  const imageSource = {uri: param.EventImage};
+
   return (
-    <View
-      style={Style.map}>
+    <View style={Style.map}>
       <View style={Style.innermap}>
         <Image
           style={{width: 88, height: 88, borderRadius: 12, marginRight: 12}}
-          source={concert}
+          source={imageSource}
         />
         <View style={Style.mapcontent}>
           <Text style={Style.maptexts}>Workshop</Text>
-          <Text style={Style.mapmaintitle}>Framer Workshop</Text>
-          <Text style={Style.maptexts}>Date</Text>
-          <Text style={Style.mapbutton}>Price</Text>
+          <Text style={Style.mapmaintitle}>{param.EventName}</Text>
+          <Text style={Style.maptexts}>{param.EventDate}</Text>
+          <Text style={Style.mapbutton}>${param.EventPrice}</Text>
         </View>
       </View>
     </View>
   );
-}
+};
 
 export default Card;
-
 
 const Style = StyleSheet.create({
   map: {
@@ -39,7 +39,7 @@ const Style = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor:"#FFFFFF"
+    backgroundColor: '#FFFFFF',
   },
   mapcontent: {
     height: 72,

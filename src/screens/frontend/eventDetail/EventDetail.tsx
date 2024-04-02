@@ -1,70 +1,86 @@
+import React from 'react';
 import {
   View,
   Text,
-  ScrollView,
   Image,
   StyleSheet,
   TouchableOpacity,
+  Linking,
+  FlatList,
 } from 'react-native';
-import React from 'react';
 import arrowleft from '../../../assets/images/arrow-left.png';
-import concert from '../../../assets/images/concert.jpeg';
 import map from '../../../assets/images/map.jpeg';
 import mapicon from '../../../assets/images/mapicon.png';
 
-const EventDetail = ({navigation}:any) => {
+const EventDetail = ({navigation, route}: any) => {
+  const {param} = route.params;
+  const Accountimg = {uri: param.EventAdminPhoto};
+  const concertimg = {uri: param.EventImage};
+
+  const openMap = () => {
+    Linking.openURL(param.EventMapURL);
+  };
+
   return (
-    <ScrollView>
-      <View style={Style.container}>
-        <View style={Style.topview}>
-          <TouchableOpacity onPress={()=>navigation.goBack()} style={Style.topimgview}>
-            <Image style={{width: 24, height: 24}} source={arrowleft} />
-          </TouchableOpacity>
-          <Text style={Style.topviewtext}>Event Details</Text>
-        </View>
-        <TouchableOpacity>
-          <Image style={Style.detailimg} source={concert} />
-        </TouchableOpacity>
-        <View style={Style.headingview}>
-          <Text style={Style.headingtext1}>Radiohead Concert</Text>
-          <Text style={Style.headingtext2}>price</Text>
-        </View>
-        <Text style={Style.participate}>Participat {'  '} Date</Text>
-        <View style={Style.desc}>
-          <Text style={Style.desctext1}>About Event</Text>
-          <Text style={Style.desctext2}>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facilis
-            facere aliquid natus laborum reprehenderit accusantium dolores
-            dolorum in quibusdam sit!
-          </Text>
-          <View style={Style.profileview}>
-            <Image style={Style.profileimg} source={concert} />
-            <Text style={Style.profiletext}>Account name</Text>
+    <FlatList
+      data={[1]}
+      renderItem={() => (
+        <View style={Style.container}>
+          <View style={Style.topview}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={Style.topimgview}>
+              <Image style={{width: 24, height: 24}} source={arrowleft} />
+            </TouchableOpacity>
+            <Text style={Style.topviewtext}>Event Details</Text>
           </View>
-        </View>
-        <Text
-          style={{
-            fontWeight: '600',
-            fontSize: 16,
-            lineHeight: 20,
-            color: '#171B2E',
-          }}>
-          map
-        </Text>
-        <View style={{position: 'relative'}}>
-          <Image style={Style.map} source={map} />
-          <TouchableOpacity style={Style.mapbotton}>
-            <Image style={Style.mapbottonicon} source={mapicon} />
-            <Text>Direct map</Text>
+          <TouchableOpacity>
+            <Image style={Style.detailimg} source={concertimg} />
+          </TouchableOpacity>
+          <View style={Style.headingview}>
+            <Text style={Style.headingtext1}>{param.EventName}</Text>
+            <Text style={Style.headingtext2}>${param.EventPrice}</Text>
+          </View>
+          <Text style={Style.participate}>
+            Participat {'  '} {param.EventDate}
+          </Text>
+          <View style={Style.desc}>
+            <Text style={Style.desctext1}>About Event</Text>
+            <Text style={Style.desctext2}>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facilis
+              facere aliquid natus laborum reprehenderit accusantium dolores
+              dolorum in quibusdam sit!
+            </Text>
+            <View style={Style.profileview}>
+              <Image style={Style.profileimg} source={Accountimg} />
+              <Text style={Style.profiletext}>{param.EventAdminName}</Text>
+            </View>
+          </View>
+          <Text
+            style={{
+              fontWeight: '600',
+              fontSize: 16,
+              lineHeight: 20,
+              color: '#171B2E',
+            }}>
+            map
+          </Text>
+          <View style={{position: 'relative'}}>
+            <Image style={Style.map} source={map} />
+            <TouchableOpacity style={Style.mapbotton} onPress={openMap}>
+              <Image style={Style.mapbottonicon} source={mapicon} />
+              <Text>Direct map</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('TicketDetail', {param: param})}
+            style={Style.botton}>
+            <Text style={Style.bottontext}>Buy Ticket</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('TicketDetail')}
-          style={Style.botton}>
-          <Text style={Style.bottontext}>Buy Ticket</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      )}
+      keyExtractor={(item, index) => index.toString()}
+    />
   );
 };
 
@@ -74,7 +90,7 @@ const Style = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
-    position:'relative'
+    position: 'relative',
   },
   topview: {
     flexDirection: 'row',
@@ -197,10 +213,10 @@ const Style = StyleSheet.create({
     height: 52,
     borderRadius: 28,
     backgroundColor: '#6F3DE9',
-    justifyContent:'center',
-    alignItems:'center',
-    marginBottom:10,
-    marginTop:12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 12,
   },
   bottontext: {
     fontWeight: '600',

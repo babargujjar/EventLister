@@ -1,10 +1,12 @@
 import {View, Text, ScrollView, StyleSheet, Image} from 'react-native';
 import React from 'react';
 import arrowleft from '../../../assets/images/arrow-left-white.png';
-import concert from '../../../assets/images/concert.jpeg';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const TicketDetail = ({navigation}:any) => {
+
+const TicketDetail = ({navigation,route}: any) => {
+  const {param} = route.params;
+  const concertimg = {uri:param.EventImage}
   return (
     <ScrollView>
       <View style={Style.container}>
@@ -17,12 +19,12 @@ const TicketDetail = ({navigation}:any) => {
           <Text style={Style.topviewtext}>Detail Ticket</Text>
         </View>
         <View style={Style.mianview}>
-          <Image style={Style.mainviewimg} source={concert} />
+          <Image style={Style.mainviewimg} source={concertimg} />
           <Text style={Style.mainimgbotton}>Concert</Text>
           <View style={{marginHorizontal: 10}}>
             <View style={Style.operview}>
-              <Text style={Style.headingmainview}>Radiohead concert</Text>
-              <Text style={Style.priceinmainview}>Price</Text>
+              <Text style={Style.headingmainview}>{param.EventName}</Text>
+              <Text style={Style.priceinmainview}>${param.EventPrice}</Text>
             </View>
 
             <View style={{height: 39}}>
@@ -31,13 +33,13 @@ const TicketDetail = ({navigation}:any) => {
                 <Text style={Style.usertext}>Date</Text>
               </View>
               <View style={Style.user}>
-                <Text style={Style.userdatatext}>name</Text>
-                <Text style={Style.userdatatext}>original date</Text>
+                <Text style={Style.userdatatext}>{param.EventAdminName}</Text>
+                <Text style={Style.userdatatext}>{param.EventDate}</Text>
               </View>
             </View>
             <View style={{marginTop: 16}}>
               <Text style={Style.usertext}>Location</Text>
-              <Text style={Style.userdatatext}>Faisalabad</Text>
+              <Text style={Style.userdatatext}>{param.EventLocation}</Text>
             </View>
           </View>
           <View
@@ -187,7 +189,7 @@ const Style = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 19,
     color: '#171B2E',
-    textAlign:'center',
-    marginBottom:16
+    textAlign: 'center',
+    marginBottom: 16,
   },
 });
