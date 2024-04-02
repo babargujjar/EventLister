@@ -44,7 +44,7 @@ const Home = ({navigation}:any) => {
 
   // Usage example:
   const recentEvent = findMostRecentEvent(events);
-  console.log('Most recent event:', recentEvent);
+  // console.log('Most recent event:', recentEvent);
   const recentimg = {uri: recentEvent?.EventAdminPhoto};
   const recenteventimg = {uri: recentEvent?.EventImage};
 
@@ -147,7 +147,7 @@ const Home = ({navigation}:any) => {
                         textAlign: 'center',
                         padding: 5,
                       }}>
-                      {recentEvent? recentEvent.EventPrice : "Loading.."}
+                      ${recentEvent? recentEvent.EventPrice : "Loading.."}
                     </Text>
                   </View>
                   <Text

@@ -1,4 +1,5 @@
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import Blank from "../../assets/images/blank.jpg"
 import React from 'react';
 
 const Card = ({param}: any) => {
@@ -13,7 +14,7 @@ const Card = ({param}: any) => {
           source={imageSource}
         />
         <View style={Style.mapcontent}>
-          <Text style={Style.maptexts}>Workshop</Text>
+          <Text style={Style.maptexts}>{param.EventType}</Text>
           <Text style={Style.mapmaintitle}>{param.EventName}</Text>
           <Text style={Style.maptexts}>{param.EventDate}</Text>
           <Text style={Style.mapbutton}>${param.EventPrice}</Text>

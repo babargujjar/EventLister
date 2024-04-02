@@ -42,7 +42,7 @@ const EventDetail = ({navigation, route}: any) => {
             <Text style={Style.headingtext2}>${param.EventPrice}</Text>
           </View>
           <Text style={Style.participate}>
-            Participat {'  '} {param.EventDate}
+           {param.EventParticipates}  Participat {'  '} {param.EventDate}
           </Text>
           <View style={Style.desc}>
             <Text style={Style.desctext1}>About Event</Text>

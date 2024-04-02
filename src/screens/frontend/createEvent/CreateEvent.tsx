@@ -6,6 +6,7 @@ import firestore from "@react-native-firebase/firestore"
 import auth from "@react-native-firebase/auth"
 import { useAppDispatch } from '../../../hooks/hooks';
 import {UploadEvent} from '../../../store/createEventSlice';
+import { FlatList } from 'react-native-gesture-handler';
 
 
 
@@ -25,6 +26,15 @@ const initialEvent: any = {
     photoURL: '',
   },
 };
+  const options = [
+    'Exhibition',
+    'Workshop',
+    'Conference',
+    'Festival',
+    'Game',
+    'Premiere',
+    'Concert',
+    ];
 
 const CreateEvent = () => {
 
@@ -32,11 +42,15 @@ const CreateEvent = () => {
   const [price,setPrice] = useState("")
   const [eventDate,setEventDate] = useState("")
   const [eventLocation,setEventLocation] = useState("")
+  const [eventType,setEventType] = useState("")
+  const [optionModel,setOptionModel] = useState(false)
   const [eventMapURL,setEventMapURL] = useState("")
+  const [participate,setParticipate] = useState(0)
   const [imageURI, setImageURI] = useState('');
   const  adminName = auth().currentUser?.displayName
   const  adminPhoto = auth().currentUser?.photoURL
   const  adminUid = auth().currentUser?.uid
+
 
 
 const Event = async () => {
@@ -48,6 +62,8 @@ const Event = async () => {
       eventLocation,
       eventMapURL,
       imageURI,
+      participate,
+      eventType,
       createdBy: {
         adminName,
         adminUid,
@@ -65,7 +81,8 @@ const Event = async () => {
       !eventData.imageURI ||
       !eventData.createdBy.adminName ||
       !eventData.createdBy.adminUid ||
-      !eventData.createdBy.adminPhoto
+      !eventData.createdBy.adminPhoto ||
+      !eventData.eventType
     ) {
       ToastAndroid.show('Please Enter all fields', ToastAndroid.SHORT);
       return; 
@@ -82,10 +99,19 @@ const Event = async () => {
       EventAdminUid: eventData.createdBy.adminUid,
       EventAdminName: eventData.createdBy.adminName,
       EventAdminPhoto: eventData.createdBy.adminPhoto,
+      EventParticipates:eventData.participate,
+      EventType:eventData.eventType
     });
 
     ToastAndroid.show('Event created successfully!', ToastAndroid.SHORT);
-    ()=>{initialEvent()}
+        setEventName('');
+        setPrice('');
+        setEventDate('');
+        setEventLocation('');
+        setEventType('');
+        setEventMapURL('');
+        setImageURI('');
+        setOptionModel(false);
   } catch (error) {
     console.error('Error creating event', error);
     ToastAndroid.show('Error creating event', ToastAndroid.SHORT);
@@ -122,6 +148,7 @@ const Event = async () => {
             <Text style={Style.nametext}>Event Name</Text>
             <View>
               <TextInput
+                autoCorrect={true}
                 style={Style.input}
                 placeholder="Enter Name"
                 keyboardType="default"
@@ -162,6 +189,40 @@ const Event = async () => {
             </View>
           </View>
         </View>
+        <View>
+          <View style={Style.inputview}>
+            <Text style={Style.nametext}>Event Type</Text>
+            <TouchableOpacity onPress={() => setOptionModel(true)}>
+              <TextInput
+                style={Style.input}
+                onChangeText={value => setEventType(value)}
+                value={eventType}
+                placeholder="Select Event Type"
+                keyboardType="default"
+                placeholderTextColor="#171B2E"
+                editable={false} // to prevent direct editing of TextInput
+              />
+            </TouchableOpacity>
+          </View>
+          {optionModel && (
+            <View style={Style.optionModel}>
+              <FlatList
+                data={options}
+                renderItem={({item}) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setEventType(item);
+                      setOptionModel(false); // Close the options model after selecting an option
+                    }}>
+                    <Text style={Style.optionText}>{item}</Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
+          )}
+        </View>
+
         <View>
           <View style={Style.inputview}>
             <Text style={Style.nametext}>Event Location</Text>
@@ -295,7 +356,25 @@ const Style = StyleSheet.create({
   upload:{
     width:48,
     height:48
-  }
+  },
+  optionModel: {
+    position: 'absolute',
+    zIndex:999,
+    top: 80, // Customize as per your requirement
+    left: 20, // Customize as per your requirement
+    right: 20, // Customize as per your requirement
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    elevation: 5,
+    padding: 10,
+  },
+  optionText: {
+    fontSize: 16,
+    color: '#000000',
+    padding: 10,
+  },
+
+
 });
 
 
