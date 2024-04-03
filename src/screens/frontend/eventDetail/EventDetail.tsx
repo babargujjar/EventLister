@@ -7,15 +7,35 @@ import {
   TouchableOpacity,
   Linking,
   FlatList,
+  ToastAndroid,
 } from 'react-native';
 import arrowleft from '../../../assets/images/arrow-left.png';
 import map from '../../../assets/images/map.jpeg';
 import mapicon from '../../../assets/images/mapicon.png';
+import firestore from "@react-native-firebase/firestore"
 
 const EventDetail = ({navigation, route}: any) => {
   const {param} = route.params;
   const Accountimg = {uri: param.EventAdminPhoto};
   const concertimg = {uri: param.EventImage};
+
+  const addParticipate =async () =>{
+    try {
+      try {
+        const eventRef = firestore().collection('events').doc(param.id);
+        await eventRef.update({
+          EventParticipates: param.EventParticipates + 1,
+        });
+        ToastAndroid.show("Ticket Buy Successfully!",ToastAndroid.SHORT)
+      } catch (error) {
+        ToastAndroid.show('Somthing Went wrong', ToastAndroid.SHORT);
+      }
+      navigation.navigate('TicketDetail', {param: param});
+    } catch (error) {
+      console.error('Error updating participation:', error);
+    }
+
+  }
 
   const openMap = () => {
     Linking.openURL(param.EventMapURL);
@@ -42,7 +62,7 @@ const EventDetail = ({navigation, route}: any) => {
             <Text style={Style.headingtext2}>${param.EventPrice}</Text>
           </View>
           <Text style={Style.participate}>
-           {param.EventParticipates}  Participat {'  '} {param.EventDate}
+            {param.EventParticipates} Participat {'  '} {param.EventDate}
           </Text>
           <View style={Style.desc}>
             <Text style={Style.desctext1}>About Event</Text>
@@ -72,9 +92,7 @@ const EventDetail = ({navigation, route}: any) => {
               <Text>Direct map</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('TicketDetail', {param: param})}
-            style={Style.botton}>
+          <TouchableOpacity onPress={addParticipate} style={Style.botton}>
             <Text style={Style.bottontext}>Buy Ticket</Text>
           </TouchableOpacity>
         </View>

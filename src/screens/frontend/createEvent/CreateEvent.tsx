@@ -4,10 +4,8 @@ import Upload from "../../../assets/images/Upload.png"
 import  {launchImageLibrary, ImagePickerResponse} from "react-native-image-picker"
 import firestore from "@react-native-firebase/firestore"
 import auth from "@react-native-firebase/auth"
-import { useAppDispatch } from '../../../hooks/hooks';
-import {UploadEvent} from '../../../store/createEventSlice';
 import { FlatList } from 'react-native-gesture-handler';
-
+import Arrow from '../../../assets/images/ArrowRight.png';
 
 
 const initialEvent: any = {
@@ -202,6 +200,9 @@ const Event = async () => {
                 placeholderTextColor="#171B2E"
                 editable={false} // to prevent direct editing of TextInput
               />
+              <View style={Style.arrow}>
+                <Image style={Style.arrowimg} source={Arrow} />
+              </View>
             </TouchableOpacity>
           </View>
           {optionModel && (
@@ -258,7 +259,7 @@ const Event = async () => {
           <TouchableOpacity onPress={handleSelectImage} style={Style.inputimg}>
             {imageURI ? (
               <Image
-                style={{zIndex: 999, height: '100%', width: '100%'}}
+                style={{zIndex: 995, height: '100%', width: '100%'}}
                 source={{uri: imageURI}}
               />
             ) : (
@@ -303,6 +304,7 @@ const Style = StyleSheet.create({
     flexDirection: 'column',
     gap: 12,
     marginBottom: 16,
+    position:'relative'
   },
   input: {
     height: 52,
@@ -346,20 +348,20 @@ const Style = StyleSheet.create({
     borderStyle: 'dashed',
     borderWidth: 1,
     borderColor: '#171B2E',
-    marginTop:12,
-    borderRadius:20,
-    justifyContent:'center',
-    alignItems:'center',
-    overflow:'hidden'
+    marginTop: 12,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
     // backgroundColor:'#F9F9F9'
   },
-  upload:{
-    width:48,
-    height:48
+  upload: {
+    width: 48,
+    height: 48,
   },
   optionModel: {
     position: 'absolute',
-    zIndex:999,
+    zIndex: 995,
     top: 80, // Customize as per your requirement
     left: 20, // Customize as per your requirement
     right: 20, // Customize as per your requirement
@@ -373,8 +375,15 @@ const Style = StyleSheet.create({
     color: '#000000',
     padding: 10,
   },
-
-
+  arrow: {
+    position: 'absolute',
+    top: '28%',
+    right: '2%',
+  },
+  arrowimg: {
+    height: 24,
+    width: 24,
+  },
 });
 
 

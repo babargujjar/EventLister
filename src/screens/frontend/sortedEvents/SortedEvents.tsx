@@ -1,97 +1,105 @@
-import {View, Text, ScrollView, StyleSheet, Image} from 'react-native';
-import React from 'react';
-import filter from '../../../assets/images/Filter.png';
-import search from '../../../assets/images/Search.png';
+import React, {useState} from 'react';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Image,
+  Text,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
+import FilterIcon from '../../../assets/images/Filter.png';
+import SearchIcon from '../../../assets/images/Search.png';
 import FilterdEvents from '../../../components/filteredEvents/FilteredEvents';
 
 const SortedEvents = () => {
+  const [modalVisible, setModalVisible] = useState(true);
+  const [selectedValue, setSelectedValue] = useState('Select an option');
+
+  const handleFilterChange = (values: number[], date: Date) => {
+    console.log('Price Range:', values);
+    console.log('Sorted By Category:', selectedValue);
+    console.log('Sorted By Date:', date);
+  };
+
+  const handleSelectValue = (value: string) => {
+    setSelectedValue(value);
+    setModalVisible(false);
+  };
+
   return (
-    <ScrollView style={Style.container}>
-      <View style={{marginHorizontal: 20}}>
-        <View style={Style.resent}>
-          <Text style={Style.resenttext}>Recent Events</Text>
-          <View style={Style.resentimgview}>
-            <Image style={Style.resentimg} source={filter} />
-          </View>
+    <ScrollView style={styles.container}>
+      <View style={styles.content}>
+        <View style={styles.recentEvents}>
+          <Text style={styles.recentEventsText}>Recent Events</Text>
+          <Image source={FilterIcon} style={styles.filterIcon} />
         </View>
-        <View style={Style.inputview}>
-          <Image style={{height: 24, width: 24}} source={search} />
-          <Text style={{color: '#171B2E', paddingLeft: 10}}>search...</Text>
+        <View style={styles.searchBar}>
+          <Image source={SearchIcon} style={styles.searchIcon} />
+          <Text style={styles.searchText}>search...</Text>
         </View>
-        <View style={Style.ongoing}>
-          <Text style={Style.ongoingtext}>Events</Text>
-        </View>
-        <FilterdEvents />
-        <FilterdEvents />
+        <Text style={styles.ongoingEventsText}>Ongoing Events</Text>
         <FilterdEvents />
       </View>
+      
     </ScrollView>
   );
 };
-export default SortedEvents;
 
-const Style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
-    color: '#171B2E',
     flex: 1,
-    // borderWidth: 2,
+    paddingHorizontal: 20,
   },
-  resent: {
-    color: '#171B2E',
+  content: {
     marginTop: 32,
-
+  },
+  recentEvents: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 42,
-    flexDirection: 'row',
-    // width: 335,
+    marginBottom: 30,
   },
-  resentimgview: {
-    width: 42,
-    height: 42,
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 100,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderColor: '#EFF0F9',
+  recentEventsText: {
+    fontSize: 22,
+    fontWeight: '600',
+    color: '#171B2E',
   },
-  resentimg: {
+  filterIcon: {
     width: 22,
     height: 22,
   },
-  resenttext: {
-    color: '#171B2E',
-    fontSize: 22,
-    lineHeight: 28,
-    fontWeight: '600',
-  },
-  inputview: {
-    height: 52,
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderRadius: 26,
-    // borderWidth: 1,
-    // borderColor: '#FFFFFF',
-    marginTop: 30,
-    // backgroundColor: '#FFFFFF',
-
-    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    height: 52,
     marginBottom: 30,
-    alignItems: 'center',
-    paddingLeft: 16,
+    paddingHorizontal: 16,
   },
-  ongoing: {
-    height: 23,
-
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+  modalView: {
+    flex: 1,
+    justifyContent: 'flex-end',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // transparent background
+  },
+  searchIcon: {
+    width: 24,
+    height: 24,
+  },
+  searchText: {
+    color: '#171B2E',
+    paddingLeft: 10,
+  },
+  ongoingEventsText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#171B2E',
     marginBottom: 20,
   },
-  ongoingtext: {
-    color: '#171B2E',
-    fontSize: 18,
-    lineHeight: 23,
-    fontWeight: '600',
-  },
 });
+
+export default SortedEvents;
