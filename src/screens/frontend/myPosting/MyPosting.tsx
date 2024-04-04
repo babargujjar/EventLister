@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
-  ScrollView,
   ToastAndroid,
 } from 'react-native';
 import search from '../../../assets/images/Search.png';
@@ -16,6 +15,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 const MyPosting = ({navigation}: any) => {
+
   const user = auth().currentUser?.uid;
   const [userEvents, setUserEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,12 +28,10 @@ const MyPosting = ({navigation}: any) => {
         const snapshot = await eventsRef
           .where('EventAdminUid', '==', user)
           .get();
-
         if (snapshot.empty) {
           ToastAndroid.show('You havent created any events yet. Get started by creating yourfirst event!',ToastAndroid.LONG);
           return;
         }
-
         const eventsData: any = [];
         snapshot.forEach(doc => {
           eventsData.push({id: doc.id, ...doc.data()});
@@ -47,6 +45,7 @@ const MyPosting = ({navigation}: any) => {
 
     fetchEvents();
   }, [user]);
+
 
   const renderEventCard = ({item}: any) => {
     return (
@@ -69,6 +68,7 @@ const MyPosting = ({navigation}: any) => {
     );
   };
 
+
   return (
     <FlatList
       data={userEvents}
@@ -82,7 +82,6 @@ const MyPosting = ({navigation}: any) => {
         </View>
       )}
       renderItem={renderEventCard}
-      // keyExtractor={item => item.id}
       ListFooterComponent={
         loading ? (
           <ActivityIndicator

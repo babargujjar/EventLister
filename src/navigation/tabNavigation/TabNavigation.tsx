@@ -1,12 +1,8 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
 import Home from '../../screens/frontend/home/Home';
 import MyPosting from '../../screens/frontend/myPosting/MyPosting';
 import CreateEvent from '../../screens/frontend/createEvent/CreateEvent';
-import SignIn from '../../screens/auth/signIn/SignIn';
-import {Image, Text, View} from 'react-native';
-import SignUp from '../../screens/auth/signup/SignUp';
-import EventDetail from '../../screens/frontend/eventDetail/EventDetail';
+import {Image,View} from 'react-native';
 import SortedEvents from '../../screens/frontend/sortedEvents/SortedEvents';
 import Profile from '../../screens/frontend/profile/Profile';
 
@@ -14,6 +10,7 @@ import Profile from '../../screens/frontend/profile/Profile';
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
+  
   return (
     <Tab.Navigator>
       <Tab.Group>

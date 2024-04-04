@@ -8,7 +8,7 @@ import {
   Image,
   ToastAndroid
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import img from "../../../assets/images/Google.png"
 import { Signin, googleSignin } from '../../../store/authSlice';
 import {useAppDispatch} from '../../../hooks/hooks';
@@ -37,8 +37,8 @@ const SignIn = ({navigation}:any) => {
 
   const googleSignIn = () => {
      dispatch(googleSignin())
-  
    };
+
   return (
     <ScrollView style={Styles.page}>
       <View>
@@ -78,25 +78,13 @@ const SignIn = ({navigation}:any) => {
             <Text style={{color: '#6F3DE9'}}>SignUp Instead</Text>
           </TouchableOpacity>
         </Text>
-        <TouchableOpacity
-          style={Styles.button}
-          onPress={signin}>
+        <TouchableOpacity style={Styles.button} onPress={signin}>
           <Text style={Styles.text}>Sign In</Text>
         </TouchableOpacity>
         <View style={Styles.OR}>
-          <View
-            style={{
-              borderBottomWidth: 1,
-              borderColor: '#00000',
-              flex: 1,
-            }}></View>
+          <View style={Styles.empty}></View>
           <Text style={{color: '#171B2E', fontSize: 14}}>OR</Text>
-          <View
-            style={{
-              borderBottomWidth: 1,
-              borderColor: '#00000',
-              flex: 1,
-            }}></View>
+          <View style={Styles.empty}></View>
         </View>
         <TouchableOpacity style={Styles.imgview} onPress={googleSignIn}>
           <Image style={Styles.image} source={img} />
@@ -192,7 +180,12 @@ const Styles = StyleSheet.create({
     marginTop: 24,
     height: 48,
     backgroundColor: '#EDEDED',
-    borderRadius:100,
-    padding:10
+    borderRadius: 100,
+    padding: 10,
+  },
+  empty: {
+    borderBottomWidth: 1,
+    borderColor: '#00000',
+    flex: 1,
   },
 });

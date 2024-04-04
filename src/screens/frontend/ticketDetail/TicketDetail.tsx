@@ -4,8 +4,10 @@ import arrowleft from '../../../assets/images/arrow-left-white.png';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const TicketDetail = ({navigation, route}: any) => {
+
   const {param} = route.params;
   const concertimg = {uri: param.EventImage};
+
   return (
     <ScrollView>
       <View style={Style.container}>
@@ -42,20 +44,10 @@ const TicketDetail = ({navigation, route}: any) => {
             </View>
           </View>
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: 20,
-              alignItems: 'center',
-            }}>
+            style={Style.lineparent}>
             <View style={Style.emptyviewleft}></View>
             <Text
-              style={{
-                borderBottomWidth: 0.5,
-                borderRadius: 6,
-                borderStyle: 'dotted',
-                width: 200,
-              }}></Text>
+              style={Style.line}></Text>
             <View style={Style.emptyviewrigth}></View>
           </View>
           <View style={Style.barcode}></View>
@@ -189,5 +181,17 @@ const Style = StyleSheet.create({
     color: '#171B2E',
     textAlign: 'center',
     marginBottom: 16,
+  },
+  lineparent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  line: {
+    borderBottomWidth: 0.5,
+    borderRadius: 6,
+    borderStyle: 'dotted',
+    width: 200,
   },
 });

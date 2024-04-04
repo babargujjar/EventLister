@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,41 +7,38 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-  ToastAndroid
+  ToastAndroid,
 } from 'react-native';
 import img from '../../../assets/images/Google.png';
-import { useAppDispatch,useAppSelector } from '../../../hooks/hooks';
-import { Signup,googleSignin } from '../../../store/authSlice';
+import {useAppDispatch, useAppSelector} from '../../../hooks/hooks';
+import {Signup, googleSignin} from '../../../store/authSlice';
 
-const SignUp = ({ navigation }: any) => {
+const SignUp = ({navigation}: any) => {
   
   const [name, setName]: any = useState('');
   const [email, setEmail]: any = useState('');
   const [password, setPassword]: any = useState('');
 
+  const dispatch = useAppDispatch();
 
-  const dispatch = useAppDispatch()
-
-const signup =async ()=>{
+  const signup = async () => {
     try {
-     if (!name || !email || !password) {
-       ToastAndroid.show('Please enter all fields', ToastAndroid.SHORT);
-       return;
-     }else{
-      await dispatch(Signup({name,email,password}))
-     }
-
-  } catch (error) {
-    ToastAndroid.show(
-      'server error please try again later',
-      ToastAndroid.SHORT,
-    );
-  }
-}
-
+      if (!name || !email || !password) {
+        ToastAndroid.show('Please enter all fields', ToastAndroid.SHORT);
+        return;
+      } else {
+        await dispatch(Signup({name, email, password}));
+      }
+    } catch (error) {
+      ToastAndroid.show(
+        'server error please try again later',
+        ToastAndroid.SHORT,
+      );
+    }
+  };
 
   const googleSignIn = async () => {
-dispatch(googleSignin());
+    dispatch(googleSignin());
   };
 
   return (
@@ -91,18 +88,18 @@ dispatch(googleSignin());
           onPress={() => {
             navigation.navigate('SignIn');
           }}>
-          <Text style={{ color: '#6F3DE9' }}>Login Instead</Text>
+          <Text style={{color: '#6F3DE9'}}>Login Instead</Text>
         </TouchableOpacity>
       </Text>
-      <TouchableOpacity
-        style={Styles.button}
-        onPress={signup}>
+      <TouchableOpacity style={Styles.button} onPress={signup}>
         <Text style={Styles.text}>Create a New Account</Text>
       </TouchableOpacity>
       <View style={Styles.OR}>
-        <View style={{ borderBottomWidth: 1, borderColor: '#00000', flex: 1 }}></View>
-        <Text style={{ color: '#171B2E', fontSize: 14 }}>OR</Text>
-        <View style={{ borderBottomWidth: 1, borderColor: '#00000', flex: 1 }}></View>
+        <View
+          style={{borderBottomWidth: 1, borderColor: '#00000', flex: 1}}></View>
+        <Text style={{color: '#171B2E', fontSize: 14}}>OR</Text>
+        <View
+          style={{borderBottomWidth: 1, borderColor: '#00000', flex: 1}}></View>
       </View>
       <View style={Styles.imgview}>
         <TouchableOpacity onPress={googleSignIn}>

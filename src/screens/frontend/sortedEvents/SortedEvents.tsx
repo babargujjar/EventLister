@@ -13,19 +13,6 @@ import SearchIcon from '../../../assets/images/Search.png';
 import FilterdEvents from '../../../components/filteredEvents/FilteredEvents';
 
 const SortedEvents = () => {
-  const [modalVisible, setModalVisible] = useState(true);
-  const [selectedValue, setSelectedValue] = useState('Select an option');
-
-  const handleFilterChange = (values: number[], date: Date) => {
-    console.log('Price Range:', values);
-    console.log('Sorted By Category:', selectedValue);
-    console.log('Sorted By Date:', date);
-  };
-
-  const handleSelectValue = (value: string) => {
-    setSelectedValue(value);
-    setModalVisible(false);
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -84,7 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   searchIcon: {
     width: 24,

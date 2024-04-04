@@ -2,9 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import EventDetail from '../../screens/frontend/eventDetail/EventDetail';
 import TicketDetail from '../../screens/frontend/ticketDetail/TicketDetail';
-import {NavigationContainer} from '@react-navigation/native';
 import TabNavigation from '../tabNavigation/TabNavigation';
-import Home from '../../screens/frontend/home/Home';
 import ResetPassword from '../../screens/frontend/resetPassword/ResetPassword';
 import SignIn from '../../screens/auth/signIn/SignIn';
 import SignUp from '../../screens/auth/signup/SignUp';
@@ -12,10 +10,10 @@ import auth from '@react-native-firebase/auth';
 import EditEvent from '../../screens/frontend/editEvent/EditEvent';
 
 const StackNavigation = () => {
+
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
-  // Handle user state changes
   function onAuthStateChanged(user: any) {
     setUser(user);
     if (initializing) setInitializing(false);
@@ -23,7 +21,7 @@ const StackNavigation = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
+    return subscriber; 
   }, []);
   const Stack = createNativeStackNavigator();
   if (initializing) return null;

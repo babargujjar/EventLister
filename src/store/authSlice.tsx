@@ -55,6 +55,7 @@ export const Signup = createAsyncThunk ("auth/Signup",async ({name,email,passwor
               uid: auth()?.currentUser?.uid,
               
             })}
+
   } catch (error: any) {
     if (error.code === 'auth/email-already-in-use') {
       ToastAndroid.show('That email address is already in use!',ToastAndroid.SHORT);
@@ -148,8 +149,6 @@ export const LogOut = createAsyncThunk<void, void>(
 );
 
     
-
-
 export const authSlice = createSlice({
   name: 'auth',
   initialState,

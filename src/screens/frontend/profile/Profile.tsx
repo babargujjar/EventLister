@@ -21,7 +21,6 @@ const Profile = ({navigation}: any) => {
 
 
   const dispatch = useAppDispatch();
-
   const [imageURI, setImageURI] = useState<string>('');
   const [displayName, setDisplayName] = useState<string>('');
 
@@ -55,14 +54,11 @@ const Profile = ({navigation}: any) => {
           ToastAndroid.show('User data not available', ToastAndroid.SHORT);
           return;
         }
-
         await userData.updateProfile({
           displayName: displayName,
           photoURL: imageURI,
         });
-
         const updatedUser = auth().currentUser;
-
         if (updatedUser) {
           await firestore()
             .collection('user')
@@ -73,7 +69,6 @@ const Profile = ({navigation}: any) => {
               photoUrl: updatedUser.photoURL || null,
               uid: updatedUser.uid,
             });
-
           ToastAndroid.show(
             'Profile updated successfully!',
             ToastAndroid.SHORT,
@@ -121,10 +116,8 @@ const Profile = ({navigation}: any) => {
                 style={Style.input}
                 value={displayName}
                 onChangeText={setDisplayName}
-                // defaultValue={state}
                 placeholder="User Name"
                 placeholderTextColor="#171B2E"
-                // onChangeText={inputHandler}
                 keyboardType="default"
               />
             </View>
@@ -138,10 +131,8 @@ const Profile = ({navigation}: any) => {
               <TextInput
                 style={Style.input}
                 value={userData ? userData?.email : ''}
-                // defaultValue={state}
                 placeholder="Email"
                 placeholderTextColor="#171B2E"
-                // onChangeText={inputHandler}
                 keyboardType="email-address"
               />
             </View>
@@ -175,7 +166,6 @@ const Style = StyleSheet.create({
     flex: 1,
     paddingTop: 28,
     paddingHorizontal: 20,
-    // borderWidth: 2,
   },
   headingview: {
     height: 42,

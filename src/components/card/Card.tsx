@@ -1,5 +1,4 @@
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import Blank from '../../assets/images/blank.jpg';
+import {View, Text, Image, StyleSheet} from 'react-native';
 import React from 'react';
 
 const Card = ({param}: any) => {
@@ -71,42 +70,5 @@ const Style = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-  },
-  //   innermap: {
-  //     height: 88,
-  //     flex: 1,
-  //     flexDirection: 'row',
-  //     backgroundColor: '#FFFFFF',
-  //   },
-  //   mapcontent: {
-  //     width: 190,
-  //     margin: 8,
-  //     position: 'relative',
-  //     flexDirection: 'column',
-  //     justifyContent: 'space-between',
-  //   },
-  //   maptexts: {
-  //     fontSize: 12,
-  //     color: '#9496A5',
-  //     fontWeight: '400',
-  //     lineHeight: 19,
-  //   },
-  //   mapmaintitle: {
-  //     fontSize: 14,
-  //     color: '#171B2E',
-  //     fontWeight: '600',
-  //     lineHeight: 18,
-  //   },
-  //   mapbutton: {
-  //     backgroundColor: '#EFF0F9',
-  //     height: 32,
-  //     width: 50,
-  //     borderRadius: 40,
-  //     color: '#6F3DE9',
-  //     textAlign: 'center',
-  //     padding: 5,
-  //     position: 'absolute',
-  //     top: 0,
-  //     right: 0,
-  //   },
+  }
 });

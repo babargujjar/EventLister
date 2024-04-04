@@ -12,21 +12,21 @@ import {
 import arrowleft from '../../../assets/images/arrow-left.png';
 import map from '../../../assets/images/map.jpeg';
 import mapicon from '../../../assets/images/mapicon.png';
-import firestore from "@react-native-firebase/firestore"
+import firestore from '@react-native-firebase/firestore';
 
 const EventDetail = ({navigation, route}: any) => {
   const {param} = route.params;
   const Accountimg = {uri: param?.EventAdminPhoto};
   const concertimg = {uri: param?.EventImage};
 
-  const addParticipate =async () =>{
+  const addParticipate = async () => {
     try {
       try {
         const eventRef = firestore().collection('events').doc(param.id);
         await eventRef.update({
           EventParticipates: param?.EventParticipates + 1,
         });
-        ToastAndroid.show("Ticket Buy Successfully!",ToastAndroid.SHORT)
+        ToastAndroid.show('Ticket Buy Successfully!', ToastAndroid.SHORT);
       } catch (error) {
         ToastAndroid.show('Somthing Went wrong', ToastAndroid.SHORT);
       }
@@ -34,8 +34,7 @@ const EventDetail = ({navigation, route}: any) => {
     } catch (error) {
       console.error('Error updating participation:', error);
     }
-
-  }
+  };
 
   const openMap = () => {
     Linking.openURL(param?.EventMapURL);
@@ -76,15 +75,7 @@ const EventDetail = ({navigation, route}: any) => {
               <Text style={Style.profiletext}>{param?.EventAdminName}</Text>
             </View>
           </View>
-          <Text
-            style={{
-              fontWeight: '600',
-              fontSize: 16,
-              lineHeight: 20,
-              color: '#171B2E',
-            }}>
-            map
-          </Text>
+          <Text style={Style.maptext}>map</Text>
           <View style={{position: 'relative'}}>
             <Image style={Style.map} source={map} />
             <TouchableOpacity style={Style.mapbotton} onPress={openMap}>
@@ -207,6 +198,12 @@ const Style = StyleSheet.create({
     height: 140,
     borderRadius: 16,
     marginVertical: 20,
+  },
+  maptext: {
+    fontWeight: '600',
+    fontSize: 16,
+    lineHeight: 20,
+    color: '#171B2E',
   },
   mapbotton: {
     backgroundColor: 'black',

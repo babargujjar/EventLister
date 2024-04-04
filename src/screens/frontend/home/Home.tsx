@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  ScrollView,
   Image,
   StyleSheet,
   FlatList,
@@ -29,10 +28,6 @@ const Home = ({navigation}: any) => {
   const [eventType, setEventType] = useState('');
   const [selectedValue, setSelectedValue] = useState('Select an option');
   const [optionModel, setOptionModel] = useState(false);
-  // console.log('sortedEvents', sortedEvents);
-  //  console.log('eventDate', eventDate)
-  //  console.log('values', values)
-  //  console.log('eventtype', eventType)
 
   const handleValuesChange = (newValues: number[]) => {
     setValues(newValues);
@@ -126,19 +121,7 @@ const Home = ({navigation}: any) => {
               <View style={{marginHorizontal: 20}}>
                 <View style={Style.resent}>
                   <Text style={Style.resenttext}>Recent Events</Text>
-
-                  <View
-                    style={{
-                      width: 42,
-                      height: 42,
-                      padding: 10,
-                      // elevation: 4,
-                      borderWidth: 1,
-                      borderRadius: 100,
-                      paddingHorizontal: 10,
-                      paddingVertical: 10,
-                      borderColor: '#EFF0F9',
-                    }}>
+                  <View style={Style.modalopacity}>
                     <TouchableOpacity
                       onPress={() => setModalVisible(!modalVisible)}>
                       <Image style={Style.resentimg} source={filter} />
@@ -155,91 +138,36 @@ const Home = ({navigation}: any) => {
                   renderItem={({item}) => (
                     <TouchableOpacity
                       onPress={() =>
-                        navigation.navigate('EventDetail', {
-                          param: item,
-                        })
+                        navigation.navigate('EventDetail', {param: item})
                       }
                       style={Style.mianview}>
                       <View style={Style.imgview}>
                         <Image
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: 16,
-                            position: 'relative',
-                          }}
+                          style={Style.eventimg}
                           source={{uri: item?.EventImage}}
                         />
                         <Text style={Style.mainimgbotton}>Concert</Text>
                         <View style={Style.mainviewtext}>
                           <View style={Style.operview}>
                             <View>
-                              <Text
-                                style={{
-                                  flex: 1,
-                                  fontWeight: '600',
-                                  fontSize: 14,
-                                  lineHeight: 18,
-                                  color: '#171B2E',
-
-                                  // marginBottom: 8,
-                                }}>
-                                {item
-                                  ? item?.EventName
-                                  : 'Loading....'}
+                              <Text style={Style.eventname}>
+                                {item ? item?.EventName : 'Loading....'}
                               </Text>
-                              <View
-                                style={{
-                                  height: 19,
-                                  flex: 1,
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                }}>
+                              <View style={Style.profileimg}>
                                 <Image
-                                  style={{
-                                    width: 18,
-                                    height: 18,
-                                    borderRadius: 100,
-                                    marginRight: 7,
-                                  }}
+                                  style={Style.adminpic}
                                   source={item.EventAdminPhoto}
                                 />
-                                <Text
-                                  style={{
-                                    height: 19,
-                                    color: '#171B2E',
-                                    fontSize: 12,
-                                    fontWeight: '400',
-                                  }}>
-                                  {item
-                                    ? item.EventAdminName
-                                    : 'Loading....'}
+                                <Text style={Style.adminname}>
+                                  {item ? item.EventAdminName : 'Loading....'}
                                 </Text>
                               </View>
                             </View>
-                            <Text
-                              style={{
-                                backgroundColor: '#EFF0F9',
-                                height: 32,
-                                width: 50,
-                                borderRadius: 40,
-                                color: '#6F3DE9',
-                                textAlign: 'center',
-                                padding: 5,
-                              }}>
-                              $
-                              {item
-                                ? item.EventPrice
-                                : 'Loading..'}
+                            <Text style={Style.eventprice}>
+                              ${item ? item.EventPrice : 'Loading..'}
                             </Text>
                           </View>
-                          <Text
-                            style={{
-                              color: '#171B2E',
-                              borderTopWidth: 1,
-                              borderColor: '#EFF0F9',
-                              paddingTop: 10,
-                            }}>
+                          <Text style={Style.eventdate}>
                             {item ? item.EventDate : 'Loading..'}
                           </Text>
                         </View>
@@ -258,18 +186,7 @@ const Home = ({navigation}: any) => {
                     <View style={Style.resent}>
                       <Text style={Style.resenttext}>Recent Events</Text>
 
-                      <View
-                        style={{
-                          width: 42,
-                          height: 42,
-                          padding: 10,
-                          // elevation: 4,
-                          borderWidth: 1,
-                          borderRadius: 100,
-                          paddingHorizontal: 10,
-                          paddingVertical: 10,
-                          borderColor: '#EFF0F9',
-                        }}>
+                      <View style={Style.modalopacity}>
                         <TouchableOpacity
                           onPress={() => setModalVisible(!modalVisible)}>
                           <Image style={Style.resentimg} source={filter} />
@@ -291,12 +208,7 @@ const Home = ({navigation}: any) => {
                       style={Style.mianview}>
                       <View style={Style.imgview}>
                         <Image
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: 16,
-                            position: 'relative',
-                          }}
+                          style={Style.eventpic}
                           source={recentEvent ? recenteventimg : concert}
                         />
                         <Text style={Style.mainimgbotton}>Concert</Text>
@@ -304,44 +216,17 @@ const Home = ({navigation}: any) => {
                           <View style={Style.operview}>
                             <View>
                               <Text
-                                style={{
-                                  flex: 1,
-                                  fontWeight: '600',
-                                  fontSize: 14,
-                                  lineHeight: 18,
-                                  color: '#171B2E',
-
-                                  // marginBottom: 8,
-                                }}>
-                                {recentEvent
-                                  ? recentEvent?.EventName
-                                  : 'Loading....'}
+                                style={Style.eventname}>
+                                {recentEvent ? recentEvent?.EventName: 'Loading....'}
                               </Text>
                               <View
-                                style={{
-                                  height: 19,
-                                  flex: 1,
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  // borderWidth: 1,
-                                  // borderColor: 'red',
-                                }}>
+                                style={Style.eventpicview}>
                                 <Image
-                                  style={{
-                                    width: 18,
-                                    height: 18,
-                                    borderRadius: 100,
-                                    marginRight: 7,
-                                  }}
+                                  style={Style.pic}
                                   source={recentEvent ? recentimg : concert}
                                 />
                                 <Text
-                                  style={{
-                                    height: 19,
-                                    color: '#171B2E',
-                                    fontSize: 12,
-                                    fontWeight: '400',
-                                  }}>
+                                  style={Style.imgpic}>
                                   {recentEvent
                                     ? recentEvent.EventAdminName
                                     : 'Loading....'}
@@ -349,28 +234,11 @@ const Home = ({navigation}: any) => {
                               </View>
                             </View>
                             <Text
-                              style={{
-                                backgroundColor: '#EFF0F9',
-                                height: 32,
-                                width: 50,
-                                borderRadius: 40,
-                                color: '#6F3DE9',
-                                textAlign: 'center',
-                                padding: 5,
-                              }}>
-                              $
-                              {recentEvent
-                                ? recentEvent.EventPrice
-                                : 'Loading..'}
+                              style={Style.eventprice}>${recentEvent ? recentEvent.EventPrice:'Loading..'}
                             </Text>
                           </View>
                           <Text
-                            style={{
-                              color: '#171B2E',
-                              borderTopWidth: 1,
-                              borderColor: '#EFF0F9',
-                              paddingTop: 10,
-                            }}>
+                            style={Style.eventdate}>
                             {recentEvent ? recentEvent.EventDate : 'Loading..'}
                           </Text>
                         </View>
@@ -487,11 +355,7 @@ const Home = ({navigation}: any) => {
                                 </View>
                               </View>
                               <View
-                                style={{
-                                  borderWidth: 1,
-                                  borderColor: '#EFF0F9',
-                                  marginVertical: 4,
-                                }}
+                                style={Style.opacity}
                               />
                               <TouchableOpacity
                                 onPress={filterEvent}
@@ -507,7 +371,6 @@ const Home = ({navigation}: any) => {
                     </Modal>
                     <FlatList
                       data={events}
-                      // keyExtractor={item => item.id}
                       renderItem={({item}) => (
                         <TouchableOpacity
                           activeOpacity={0.7}
@@ -549,7 +412,6 @@ const Style = StyleSheet.create({
     alignItems: 'center',
     height: 42,
     flexDirection: 'row',
-    // width: 335,
   },
   resentimg: {
     width: 22,
@@ -565,7 +427,6 @@ const Style = StyleSheet.create({
     height: 52,
     borderRadius: 26,
     borderWidth: 1,
-    // borderColor: '#FFFFFF',
     marginTop: 30,
     backgroundColor: '#FFFFFF',
     flex: 1,
@@ -581,6 +442,19 @@ const Style = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+  },
+  eventimg: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 16,
+    position: 'relative',
+  },
+  eventname: {
+    flex: 1,
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 18,
+    color: '#171B2E',
   },
   ongoingtext: {
     color: '#171B2E',
@@ -616,8 +490,6 @@ const Style = StyleSheet.create({
     height: 294,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    //  borderWidth:1,
-    //  borderColor:'red',
     elevation: 4,
     marginHorizontal: 5,
     padding: 6,
@@ -632,8 +504,6 @@ const Style = StyleSheet.create({
   },
   operview: {
     height: 45,
-    // borderWidth: 1,
-    // borderColor: 'red',
     flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -685,7 +555,6 @@ const Style = StyleSheet.create({
     color: '#000000',
     marginTop: 5,
   },
-
   botton: {
     height: 52,
     borderRadius: 28,
@@ -727,7 +596,6 @@ const Style = StyleSheet.create({
     position: 'absolute',
     zIndex: 999,
     top: -110,
-    // left: 20,
     right: 0,
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
@@ -760,5 +628,77 @@ const Style = StyleSheet.create({
   arrowimg: {
     height: 24,
     width: 24,
+  },
+  modalopacity: {
+    width: 42,
+    height: 42,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 100,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderColor: '#EFF0F9',
+  },
+  profileimg: {
+    height: 19,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  adminpic: {
+    width: 18,
+    height: 18,
+    borderRadius: 100,
+    marginRight: 7,
+  },
+  eventpic: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 16,
+    position: 'relative',
+  },
+  adminname: {
+    height: 19,
+    color: '#171B2E',
+    fontSize: 12,
+    fontWeight: '400',
+  },
+  eventprice: {
+    backgroundColor: '#EFF0F9',
+    height: 32,
+    width: 50,
+    borderRadius: 40,
+    color: '#6F3DE9',
+    textAlign: 'center',
+    padding: 5,
+  },
+  eventdate: {
+    color: '#171B2E',
+    borderTopWidth: 1,
+    borderColor: '#EFF0F9',
+    paddingTop: 10,
+  },
+  eventpicview: {
+    height: 19,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  pic: {
+    width: 18,
+    height: 18,
+    borderRadius: 100,
+    marginRight: 7,
+  },
+  imgpic: {
+    height: 19,
+    color: '#171B2E',
+    fontSize: 12,
+    fontWeight: '400',
+  },
+  opacity: {
+    borderWidth: 1,
+    borderColor: '#EFF0F9',
+    marginVertical: 4,
   },
 });

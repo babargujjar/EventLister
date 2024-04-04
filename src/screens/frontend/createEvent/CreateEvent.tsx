@@ -1,29 +1,13 @@
 import {View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Image,Button, ToastAndroid} from 'react-native';
 import React,{useState} from 'react';
 import Upload from "../../../assets/images/Upload.png"
-import  {launchImageLibrary, ImagePickerResponse} from "react-native-image-picker"
+import  {launchImageLibrary} from "react-native-image-picker"
 import firestore from "@react-native-firebase/firestore"
 import auth from "@react-native-firebase/auth"
 import { FlatList } from 'react-native-gesture-handler';
 import Arrow from '../../../assets/images/ArrowRight.png';
 
 
-const initialEvent: any = {
-  eventName: '',
-  eventPrice: 0,
-  eventType: '',
-  eventLocation: '',
-  eventDate: new Date(),
-  eventMapUrl: '',
-  uid: '',
-  eventImage: '',
-  createdBy: {
-    email: '',
-    name: '',
-    uid: '',
-    photoURL: '',
-  },
-};
   const options = [
     'Exhibition',
     'Workshop',
@@ -69,7 +53,6 @@ const Event = async () => {
       },
     };
 
-    // Validate all fields
     if (
       !eventData.eventName ||
       !eventData.price ||
@@ -115,10 +98,6 @@ const Event = async () => {
     ToastAndroid.show('Error creating event', ToastAndroid.SHORT);
   }
 };
-
-
-
-
 
     const handleSelectImage = () => {
       launchImageLibrary({mediaType: 'photo'}, response => {
@@ -213,7 +192,7 @@ const Event = async () => {
                   <TouchableOpacity
                     onPress={() => {
                       setEventType(item);
-                      setOptionModel(false); // Close the options model after selecting an option
+                      setOptionModel(false);
                     }}>
                     <Text style={Style.optionText}>{item}</Text>
                   </TouchableOpacity>
@@ -353,7 +332,6 @@ const Style = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    // backgroundColor:'#F9F9F9'
   },
   upload: {
     width: 48,
@@ -362,9 +340,9 @@ const Style = StyleSheet.create({
   optionModel: {
     position: 'absolute',
     zIndex: 995,
-    top: 80, // Customize as per your requirement
-    left: 20, // Customize as per your requirement
-    right: 20, // Customize as per your requirement
+    top: 80,
+    left: 20, 
+    right: 20, 
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
     elevation: 5,
