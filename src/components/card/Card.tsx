@@ -1,9 +1,8 @@
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import Blank from "../../assets/images/blank.jpg"
+import Blank from '../../assets/images/blank.jpg';
 import React from 'react';
 
 const Card = ({param}: any) => {
-
   const imageSource = {uri: param.EventImage};
 
   return (
@@ -65,7 +64,6 @@ const Style = StyleSheet.create({
   mapbutton: {
     backgroundColor: '#EFF0F9',
     height: 32,
-    width: 50,
     borderRadius: 40,
     color: '#6F3DE9',
     textAlign: 'center',

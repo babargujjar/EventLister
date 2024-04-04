@@ -9,6 +9,7 @@ import ResetPassword from '../../screens/frontend/resetPassword/ResetPassword';
 import SignIn from '../../screens/auth/signIn/SignIn';
 import SignUp from '../../screens/auth/signup/SignUp';
 import auth from '@react-native-firebase/auth';
+import EditEvent from '../../screens/frontend/editEvent/EditEvent';
 
 const StackNavigation = () => {
   const [initializing, setInitializing] = useState(true);
@@ -70,6 +71,11 @@ const StackNavigation = () => {
           options={{headerShown: false}}
           name="ResetPassword"
           component={ResetPassword}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="EditEvent"
+          component={EditEvent}
         />
         
       </Stack.Group>

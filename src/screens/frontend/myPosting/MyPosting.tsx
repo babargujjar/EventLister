@@ -55,7 +55,7 @@ const MyPosting = ({navigation}: any) => {
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
-          navigation.navigate('EventDetail', {event: item});
+          navigation.navigate('EditEvent', {param: item});
         }}>
         <Card param={item} />
       </TouchableOpacity>
@@ -104,11 +104,10 @@ const Style = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingBottom: 20,
-    // height:"100%"
   },
   container2: {
     backgroundColor: '#FFFFFF',
-    paddingBottom: 20, // Add padding bottom to avoid cut-off content
+    paddingBottom: 20, 
   },
   heading: {
     color: '#171B2E',

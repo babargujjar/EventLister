@@ -16,15 +16,15 @@ import firestore from "@react-native-firebase/firestore"
 
 const EventDetail = ({navigation, route}: any) => {
   const {param} = route.params;
-  const Accountimg = {uri: param.EventAdminPhoto};
-  const concertimg = {uri: param.EventImage};
+  const Accountimg = {uri: param?.EventAdminPhoto};
+  const concertimg = {uri: param?.EventImage};
 
   const addParticipate =async () =>{
     try {
       try {
         const eventRef = firestore().collection('events').doc(param.id);
         await eventRef.update({
-          EventParticipates: param.EventParticipates + 1,
+          EventParticipates: param?.EventParticipates + 1,
         });
         ToastAndroid.show("Ticket Buy Successfully!",ToastAndroid.SHORT)
       } catch (error) {
@@ -38,7 +38,7 @@ const EventDetail = ({navigation, route}: any) => {
   }
 
   const openMap = () => {
-    Linking.openURL(param.EventMapURL);
+    Linking.openURL(param?.EventMapURL);
   };
 
   return (
@@ -58,11 +58,11 @@ const EventDetail = ({navigation, route}: any) => {
             <Image style={Style.detailimg} source={concertimg} />
           </TouchableOpacity>
           <View style={Style.headingview}>
-            <Text style={Style.headingtext1}>{param.EventName}</Text>
-            <Text style={Style.headingtext2}>${param.EventPrice}</Text>
+            <Text style={Style.headingtext1}>{param?.EventName}</Text>
+            <Text style={Style.headingtext2}>${param?.EventPrice}</Text>
           </View>
           <Text style={Style.participate}>
-            {param.EventParticipates} Participat {'  '} {param.EventDate}
+            {param?.EventParticipates} Participat {'  '} {param?.EventDate}
           </Text>
           <View style={Style.desc}>
             <Text style={Style.desctext1}>About Event</Text>
@@ -73,7 +73,7 @@ const EventDetail = ({navigation, route}: any) => {
             </Text>
             <View style={Style.profileview}>
               <Image style={Style.profileimg} source={Accountimg} />
-              <Text style={Style.profiletext}>{param.EventAdminName}</Text>
+              <Text style={Style.profiletext}>{param?.EventAdminName}</Text>
             </View>
           </View>
           <Text

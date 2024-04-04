@@ -3,10 +3,9 @@ import React from 'react';
 import arrowleft from '../../../assets/images/arrow-left-white.png';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-
-const TicketDetail = ({navigation,route}: any) => {
+const TicketDetail = ({navigation, route}: any) => {
   const {param} = route.params;
-  const concertimg = {uri:param.EventImage}
+  const concertimg = {uri: param.EventImage};
   return (
     <ScrollView>
       <View style={Style.container}>
@@ -135,7 +134,6 @@ const Style = StyleSheet.create({
   priceinmainview: {
     backgroundColor: '#EFF0F9',
     height: 32,
-    width: 50,
     borderRadius: 40,
     color: '#6F3DE9',
     textAlign: 'center',
