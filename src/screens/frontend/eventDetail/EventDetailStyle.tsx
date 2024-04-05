@@ -152,7 +152,7 @@ const EventDetailStyle = StyleSheet.create({
     lineHeight: 18,
     color: '#FFFFFF',
     fontFamily: 'Poppins-Bold',
-  },
+  }
 });
 
 export default EventDetailStyle;

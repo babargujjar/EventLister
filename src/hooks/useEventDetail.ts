@@ -1,10 +1,12 @@
 import { Linking, ToastAndroid } from "react-native";
 import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from "@react-navigation/native";
+import images from "../assets/images/images.jpg"
 
-const useEventDetail = ({navigation,route}:any) => {
-    const {param} = route.params;
+const useEventDetail = ({param}:any) => {
+  const navigation = useNavigation<any>();
 
-      const Accountimg = {uri: param?.EventAdminPhoto};
+  const Accountimg = {uri: param?.EventAdminPhoto};
   const concertimg = {uri: param?.EventImage};
 
   const addParticipate = async () => {

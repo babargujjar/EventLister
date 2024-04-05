@@ -9,30 +9,30 @@ import {
 } from 'react-native';
 import search from '../../../assets/images/Search.png';
 import Card from '../../../components/card/Card';
-import { ItemEvent } from '../../../constant/types';
+import {ItemEvent} from '../../../constant/types';
 import MyPostingStyle from './MyPostingStyle';
 import useMyPosting from '../../../hooks/useMyPosting';
 
 const MyPosting = ({navigation}: any) => {
+  const renderEventCard = ({item}: ItemEvent) => {
+    // console.log('item', item)
+    return userEvents ? (
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => {
+          navigation.navigate('EditEvent', {param: item});
+        }}>
+        <Card param={item} />
+      </TouchableOpacity>
+    ) : (
+      <Text style={MyPostingStyle.message}>
+        You haven't created any events yet. Get started by creating your first
+        event!
+      </Text>
+    );
+  };
 
-    const renderEventCard = ({item}: ItemEvent) => {
-      return userEvents ? (
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => {
-            navigation.navigate('EditEvent', {param: item});
-          }}>
-          <Card param={item} />
-        </TouchableOpacity>
-      ) : (
-        <Text style={MyPostingStyle.message}>
-          You haven't created any events yet. Get started by creating your first
-          event!
-        </Text>
-      );
-    };
-
-const {userEvents,loading}:any = useMyPosting()
+  const {userEvents, loading}: any = useMyPosting();
 
   return (
     <FlatList
@@ -62,4 +62,3 @@ const {userEvents,loading}:any = useMyPosting()
 };
 
 export default MyPosting;
-

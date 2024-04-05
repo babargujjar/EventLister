@@ -60,7 +60,7 @@ const Event = async () => {
       !eventData.imageURI ||
       !eventData.createdBy.adminName ||
       !eventData.createdBy.adminUid ||
-      !eventData.createdBy.adminPhoto ||
+      // !eventData.createdBy.adminPhoto ||
       !eventData.eventType
     ) {
       ToastAndroid.show('Please Enter all fields', ToastAndroid.SHORT);
@@ -132,6 +132,7 @@ const Event = async () => {
     setParticipate,
      options,
   imageURI,
+  setImageURI
   }
 }
 

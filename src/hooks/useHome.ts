@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { ToastAndroid } from "react-native";
 import firestore from "@react-native-firebase/firestore"
-import { EventsArray } from "../constant/types";
 
 
 
 const useHome = () => {
 
-  const [events, setEvents] = useState<EventsArray>([]);
+  const [events, setEvents] = useState<any>([]);
   const [sortedEvents, setSortedEvents] = useState<any>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [eventDate, setEventDate] = useState('');
@@ -53,7 +52,7 @@ const useHome = () => {
       return;
     }
     try {
-      const filteredEvents = events.filter((event) => {
+      const filteredEvents = events.filter((event:any) => {
           return (
             event.EventPrice >= values[0] &&
             event.EventPrice <= values[1] &&
@@ -62,24 +61,26 @@ const useHome = () => {
           );
         },
       );
-      ToastAndroid.show('No Have Related Data To Show', ToastAndroid.SHORT);
+      
       setSortedEvents(filteredEvents);
       setEventDate('');
       setEventType('');
       setValues([0, 5000]);
       setModalVisible(false);
     } catch (error) {
+      ToastAndroid.show('No Have Related Data To Show', ToastAndroid.SHORT);
       console.error('Error filtering events:', error);
     }
   };
 
-  function findMostRecentEvent(events: any) {
+  function findMostRecentEvent(events: any[]) {
     if (!events || events.length === 0) {
       return null;
     }
-    events.sort((a: any, b: any) => new Date(b.date) as any - new Date(a.date) as number);
+    events.sort((a: any, b: any) => new Date(b.date) as any - new Date(a.date));
     return events[0];
   }
+  
 
   const recentEvent = findMostRecentEvent(events);
   const recentimg = {uri: recentEvent?.EventAdminPhoto};

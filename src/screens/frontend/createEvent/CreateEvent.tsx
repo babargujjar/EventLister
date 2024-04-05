@@ -1,32 +1,39 @@
-import {View, Text, ScrollView,TextInput, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import React from 'react';
-import Upload from "../../../assets/images/Upload.png"
-import { FlatList } from 'react-native-gesture-handler';
+import Upload from '../../../assets/images/Upload.png';
+import {FlatList} from 'react-native-gesture-handler';
 import Arrow from '../../../assets/images/ArrowRight.png';
 import CreateEventStyle from './CreateEventStyle';
 import useCreateEvent from '../../../hooks/useCreateEvent';
 
 const CreateEvent = () => {
-const {
-  eventDate,
-  setEventDate,
-  eventLocation,
-  setEventLocation,
-  eventMapURL,
-  setEventMapURL,
-  eventName,
-  setEventName,
-  eventType,
-  setEventType,
-  price,
-  setPrice,
-  handleSelectImage,
-  Event,
-  optionModel,
-  setOptionModel,
-  options,
-  imageURI,
-} = useCreateEvent();
+  const {
+    eventDate,
+    setEventDate,
+    eventLocation,
+    setEventLocation,
+    eventMapURL,
+    setEventMapURL,
+    eventName,
+    setEventName,
+    eventType,
+    setEventType,
+    price,
+    setPrice,
+    handleSelectImage,
+    Event,
+    optionModel,
+    setOptionModel,
+    options,
+    imageURI,
+  } = useCreateEvent();
 
   return (
     <ScrollView>
@@ -91,7 +98,7 @@ const {
                 placeholder="Select Event Type"
                 keyboardType="default"
                 placeholderTextColor="#171B2E"
-                editable={false} 
+                editable={false}
               />
               <View style={CreateEventStyle.arrow}>
                 <Image style={CreateEventStyle.arrowimg} source={Arrow} />
@@ -134,7 +141,9 @@ const {
         </View>
         <View>
           <View style={CreateEventStyle.inputview}>
-            <Text style={CreateEventStyle.nametext}>Event Map Location URL</Text>
+            <Text style={CreateEventStyle.nametext}>
+              Event Map Location URL
+            </Text>
             <View>
               <TextInput
                 style={CreateEventStyle.input}
@@ -149,7 +158,9 @@ const {
         </View>
         <View>
           <Text style={CreateEventStyle.nametext}>Event Media</Text>
-          <TouchableOpacity onPress={handleSelectImage} style={CreateEventStyle.inputimg}>
+          <TouchableOpacity
+            onPress={handleSelectImage}
+            style={CreateEventStyle.inputimg}>
             {imageURI ? (
               <Image
                 style={{zIndex: 995, height: '100%', width: '100%'}}
@@ -172,13 +183,6 @@ const {
       </View>
     </ScrollView>
   );
-}
-
+};
 
 export default CreateEvent;
-
-
-
-
-
-

@@ -8,18 +8,19 @@ import {
 } from 'react-native';
 import React from 'react';
 import editimg from '../../../assets/images/Discoveryfocused.png';
+import images from '../../../assets/images/images.jpg';
 import ProfileStyle from './ProfileStyle';
 import useProfile from '../../../hooks/useProfile';
 
 const Profile = ({navigation}: any) => {
-const { 
-   logout,
+  const {
+    logout,
     handleSelectImage,
     handleUpdateProfile,
     imageURI,
     userData,
     displayName,
-    setDisplayName
+    setDisplayName,
   } = useProfile();
 
   return (
@@ -32,7 +33,9 @@ const {
           </TouchableOpacity>
         </View>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <TouchableOpacity onPress={handleSelectImage} style={ProfileStyle.imgview}>
+          <TouchableOpacity
+            onPress={handleSelectImage}
+            style={ProfileStyle.imgview}>
             {imageURI ? (
               <Image
                 style={{width: '100%', height: '100%', borderRadius: 71}}
@@ -73,7 +76,9 @@ const {
             </View>
           </View>
         </View>
-        <TouchableOpacity style={ProfileStyle.botton} onPress={handleUpdateProfile}>
+        <TouchableOpacity
+          style={ProfileStyle.botton}
+          onPress={handleUpdateProfile}>
           <Text style={(ProfileStyle.bottontext, {color: '#FFFFFF'})}>
             Update Profile
           </Text>
@@ -93,4 +98,3 @@ const {
 };
 
 export default Profile;
-

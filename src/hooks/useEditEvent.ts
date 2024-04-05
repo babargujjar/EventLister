@@ -110,7 +110,6 @@ const useEditEvent = ({param}:CardProps) => {
   setEventType,
   price,
   setPrice,
-  Event,
   optionModel,
   setOptionModel,
   options,

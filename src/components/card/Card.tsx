@@ -1,10 +1,9 @@
 import {View, Text, Image} from 'react-native';
 import React from 'react';
-import { CardProps} from '../../constant/types';
-import CardStyle from "./CardStyle"
+import {CardProps} from '../../constant/types';
+import CardStyle from './CardStyle';
 
 const Card = ({param}: CardProps) => {
-  console.log('param', param);
   const imageSource = {uri: param.EventImage};
 
   return (
@@ -26,5 +25,3 @@ const Card = ({param}: CardProps) => {
 };
 
 export default Card;
-
-

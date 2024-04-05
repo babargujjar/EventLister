@@ -10,10 +10,9 @@ import React from 'react';
 import Upload from '../../../assets/images/Upload.png';
 import {FlatList} from 'react-native-gesture-handler';
 import Arrow from '../../../assets/images/ArrowRight.png';
-import { CardProp } from '../../../constant/types';
+import {CardProp} from '../../../constant/types';
 import EditEventStyle from './EditEventStyle';
 import useEditEvent from '../../../hooks/useEditEvent';
-
 
 const EditEvent = ({route}: CardProp) => {
   const {param} = route.params;
@@ -32,14 +31,12 @@ const EditEvent = ({route}: CardProp) => {
     setEventType,
     price,
     setPrice,
-    Event,
     optionModel,
     setOptionModel,
     options,
     imageURI,
     handleEditEvent,
   } = useEditEvent({param});
-
 
   return (
     <ScrollView>
@@ -162,7 +159,9 @@ const EditEvent = ({route}: CardProp) => {
         </View>
         <View>
           <Text style={EditEventStyle.nametext}>Event Media</Text>
-          <TouchableOpacity onPress={handleSelectImage} style={EditEventStyle.inputimg}>
+          <TouchableOpacity
+            onPress={handleSelectImage}
+            style={EditEventStyle.inputimg}>
             {imageURI ? (
               <Image
                 style={{zIndex: 995, height: '100%', width: '100%'}}
@@ -179,7 +178,9 @@ const EditEvent = ({route}: CardProp) => {
             )}
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={handleEditEvent} style={EditEventStyle.botton}>
+        <TouchableOpacity
+          onPress={handleEditEvent}
+          style={EditEventStyle.botton}>
           <Text style={EditEventStyle.bottontext}>Edit Events</Text>
         </TouchableOpacity>
       </View>
@@ -188,5 +189,3 @@ const EditEvent = ({route}: CardProp) => {
 };
 
 export default EditEvent;
-
-

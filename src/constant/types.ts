@@ -26,3 +26,23 @@ export type CardProp = {
   route: { params: {param:Event}};
 };
 
+
+export type Eventslice = {
+  eventName: string;
+  price: string;
+  eventDate: string;
+  eventLocation: string;
+  eventMapURL: string;
+  imageURI: string;
+  createdBy: {
+    uid: any;
+    adminPhoto: URL;
+    adminName: string;
+  };
+}
+
+export type CreateEventState = {
+  event: Eventslice | null;
+  loading: boolean;
+  error: string | null;
+}
