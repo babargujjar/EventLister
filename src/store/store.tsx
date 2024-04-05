@@ -1,5 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {LogOut, Signin, Signup, googleSignin} from './authSlice';
+import { fetchEvents } from './fetchEventsSlice';
 
 
 
@@ -9,6 +10,7 @@ export const store = configureStore({
     SignUp: Signup,
     googleSignIn: googleSignin,
     logOut: LogOut,
+    events :fetchEvents,
   },
 });
 

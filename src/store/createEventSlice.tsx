@@ -9,7 +9,11 @@ interface Event {
   eventLocation: string;
   eventMapURL: string;
   imageURI: string;
-  createdBy: any;
+  createdBy: {
+    uid: any;
+    adminPhoto:URL,
+    adminName:string
+  };
 }
 
 interface CreateEventState {
