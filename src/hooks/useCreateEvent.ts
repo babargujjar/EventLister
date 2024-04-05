@@ -3,6 +3,7 @@ import firestore from "@react-native-firebase/firestore"
 import auth from "@react-native-firebase/auth"
 import { useState } from "react";
 import { ToastAndroid } from "react-native";
+import storage from '@react-native-firebase/storage';
 
 
 
@@ -35,13 +36,17 @@ const useCreateEvent = () => {
 
 const Event = async () => {
   try {
+    const imageRef = storage().ref(`event_images/${Date.now()}`);
+      await imageRef.putFile(imageURI);
+      
+      const imageUrl = await imageRef.getDownloadURL();
     const eventData = {
       eventName,
       price,
       eventDate,
       eventLocation,
       eventMapURL,
-      imageURI,
+      imageURI:imageUrl,
       participate,
       eventType,
       createdBy: {
