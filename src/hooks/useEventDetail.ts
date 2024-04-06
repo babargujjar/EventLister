@@ -14,7 +14,7 @@ const useEventDetail = ({param}:any) => {
       try {
         const eventRef = firestore().collection('events').doc(param.id);
         await eventRef.update({
-          EventParticipates: param?.EventParticipates + 1,
+          EventParticipate: param?.EventParticipate + 1,
         });
         ToastAndroid.show('Ticket Buy Successfully!', ToastAndroid.SHORT);
       } catch (error) {

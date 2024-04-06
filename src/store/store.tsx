@@ -1,6 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {LogOut, Signin, Signup, googleSignin} from './authSlice';
-import { fetchEvents } from './fetchEventsSlice';
+import eventsReducer from "./fetchEventsSlice"
+import { UploadEvent } from './createEventSlice';
 
 
 
@@ -10,7 +11,8 @@ export const store = configureStore({
     SignUp: Signup,
     googleSignIn: googleSignin,
     logOut: LogOut,
-    events :fetchEvents,
+    event: eventsReducer,
+    // uploadEvent:UploadEvent,
   },
 });
 

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { ToastAndroid } from "react-native";
 import firestore from "@react-native-firebase/firestore"
-
+import storage from '@react-native-firebase/storage';
 
 
 const useHome = () => {
+
+
 
   const [events, setEvents] = useState<any>([]);
   const [sortedEvents, setSortedEvents] = useState<any>([]);
@@ -17,24 +19,43 @@ const useHome = () => {
   const handleValuesChange = (newValues: number[]) => {
     setValues(newValues);
   };
+  // const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const eventsRef = firestore().collection('events');
-        const snapshot = await eventsRef.get();
-        const eventData: any = [];
-        snapshot.forEach(doc => {
-          eventData.push({id: doc.id, ...doc.data()});
-        });
-        setEvents(eventData);
-      } catch (error) {
-        console.error('Error fetching events:', error);
-      }
-    };
+useEffect(() => {
+  const fetchEvents = async () => {
+    try {
+      const eventsRef = firestore().collection('events');
+      const snapshot = await eventsRef.get();
+      const eventData: any = [];
 
-    fetchEvents();
-  }, []);
+      await Promise.all(snapshot.docs.map(async (doc) => {
+        const event = doc.data() ;
+        if (event.EventImage && (event.EventImage.startsWith('gs://') || event.EventImage.startsWith('https://'))) {
+          event.EventImageURL = event.EventImage;
+        } else {
+          // Check if image exists in storage
+          const imageRef = storage().ref().child(event.EventImage);
+          const exists = await imageRef.getMetadata().then(() => true).catch(() => false);
+          if (exists) {
+            const downloadURL = await imageRef.getDownloadURL();
+            event.EventImageURL = downloadURL;
+          } else {
+            console.error(`Image not found at path: ${event.EventImage}`);
+          }
+        }
+        eventData.push({ id: doc.id, ...event });
+      }));
+
+      setEvents(eventData);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+
+  fetchEvents();
+}, []);
+
+
 
   const options = [
     'Exhibition',

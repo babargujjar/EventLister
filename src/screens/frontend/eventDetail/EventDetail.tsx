@@ -38,7 +38,7 @@ const EventDetail = ({navigation, route}: any) => {
             </Text>
           </View>
           <Text style={EventDetailStyle.participate}>
-            {param?.EventParticipates} Participat {'  '} {param?.EventDate}
+            {param?.EventParticipate} Participat {'  '} {param?.EventDate}
           </Text>
           <View style={EventDetailStyle.desc}>
             <Text style={EventDetailStyle.desctext1}>About Event</Text>

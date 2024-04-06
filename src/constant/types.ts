@@ -7,7 +7,7 @@ export type Event = {
   EventLocation: string;
   EventMapURL: string;
   EventName: string;
-  EventParticipates: number;
+  EventParticipate: number;
   EventPrice: string;
   EventType: string;
   id: string;
@@ -45,4 +45,18 @@ export type CreateEventState = {
   event: Eventslice | null;
   loading: boolean;
   error: string | null;
+}
+
+export type  EventData ={
+  id: string;
+  EventName: string;
+  EventPrice: number;
+  EventDate: Date;
+  EventLocation: string;
+  EventMapURL: string;
+  EventImage: string;
+  EventAdminUid: string;
+  EventAdminName: string;
+  EventAdminPhoto: string;
+  EventImageURL?: string; // Optional field for storing download URL
 }

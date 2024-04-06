@@ -5,12 +5,14 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { useEffect, useState } from 'react';
 import { ToastAndroid } from 'react-native';
+import storage from "@react-native-firebase/storage"
 
 const useProfile = () => {
 
-      const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const [imageURI, setImageURI] = useState<string>('');
   const [displayName, setDisplayName] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
   const userData: any = auth()?.currentUser;
 
@@ -18,6 +20,7 @@ const useProfile = () => {
     if (userData) {
       setDisplayName(userData.displayName || '');
       setImageURI(userData.photoURL || '');
+      
     }
   }, []);
 
@@ -38,14 +41,28 @@ const useProfile = () => {
 
   const handleUpdateProfile = async () => {
     try {
+       setLoading(true);
       if (!userData) {
         ToastAndroid.show('User data not available', ToastAndroid.SHORT);
         return;
       }
+const displayNameChanged = userData.displayName !== displayName;
+    const photoURLChanged = userData.photoURL !== imageURI;
+
+    if (!displayNameChanged && !photoURLChanged) {
+      ToastAndroid.show('Profile already updated', ToastAndroid.SHORT);
+      return;
+    }
+       // Image upload to storage
+    const imageRef = storage().ref(`profile_images/${userData.uid}_${Date.now()}`);
+    await imageRef.putFile(imageURI);
+    const imageUrl = await imageRef.getDownloadURL();
+
       await userData.updateProfile({
         displayName: displayName,
-        photoURL: imageURI,
+        photoURL: imageUrl,
       });
+      setImageURI(imageUrl)
       const updatedUser = auth().currentUser;
       if (updatedUser) {
         await firestore()
@@ -54,7 +71,7 @@ const useProfile = () => {
           .update({
             name: updatedUser.displayName,
             email: updatedUser.email,
-            photoUrl: updatedUser.photoURL || null,
+            photoUrl: imageUrl || null,
             uid: updatedUser.uid,
           });
         ToastAndroid.show('Profile updated successfully!', ToastAndroid.SHORT);
@@ -64,6 +81,8 @@ const useProfile = () => {
     } catch (error) {
       console.error('Error updating profile:', error);
       ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
+    } finally {
+      setLoading(false); // Loader ko hide karo
     }
   };
 
@@ -77,7 +96,10 @@ const useProfile = () => {
     imageURI,
     userData,
     displayName,
-    setDisplayName
+    setDisplayName,
+    loading,
+    setLoading
+
   }
 }
 

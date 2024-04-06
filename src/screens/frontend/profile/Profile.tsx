@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import React from 'react';
 import editimg from '../../../assets/images/Discoveryfocused.png';
@@ -21,8 +22,10 @@ const Profile = ({navigation}: any) => {
     userData,
     displayName,
     setDisplayName,
+    loading,
+    setLoading
   } = useProfile();
-
+  
   return (
     <ScrollView>
       <View style={ProfileStyle.container}>
@@ -76,6 +79,11 @@ const Profile = ({navigation}: any) => {
             </View>
           </View>
         </View>
+        {loading && (
+          <View style={ProfileStyle.loaderContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
         <TouchableOpacity
           style={ProfileStyle.botton}
           onPress={handleUpdateProfile}>

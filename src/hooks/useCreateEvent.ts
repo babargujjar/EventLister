@@ -3,7 +3,7 @@ import firestore from "@react-native-firebase/firestore"
 import auth from "@react-native-firebase/auth"
 import { useState } from "react";
 import { ToastAndroid } from "react-native";
-import storage from '@react-native-firebase/storage';
+import storage from "@react-native-firebase/storage"
 
 
 
@@ -28,78 +28,83 @@ const useCreateEvent = () => {
   const [eventMapURL,setEventMapURL] = useState("")
   const [participate,setParticipate] = useState(0)
   const [imageURI, setImageURI] = useState('');
+  const [loading,setLoading] = useState(false)
   const  adminName = auth().currentUser?.displayName
   const  adminPhoto = auth().currentUser?.photoURL
   const  adminUid = auth().currentUser?.uid
-
+  const uploadImageToStorageAndGetDownloadURL = async (
+  imageURII: string,
+): Promise<string> => {
+  try {
+    const response = await fetch(imageURII);
+    const blob = await response.blob();
+    const imageName = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    const imageRef = storage().ref(`event_images/${imageName}`);
+    await imageRef.put(blob);
+    const downloadURL = await imageRef.getDownloadURL();
+    return downloadURL;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw new Error('Error uploading image');
+  }
+};
 
 
 const Event = async () => {
-  try {
-    const imageRef = storage().ref(`event_images/${Date.now()}`);
-      await imageRef.putFile(imageURI);
-      
-      const imageUrl = await imageRef.getDownloadURL();
-    const eventData = {
-      eventName,
-      price,
-      eventDate,
-      eventLocation,
-      eventMapURL,
-      imageURI:imageUrl,
-      participate,
-      eventType,
-      createdBy: {
-        adminName,
-        adminUid,
-        adminPhoto,
-      },
-    };
-
-    if (
-      !eventData.eventName ||
-      !eventData.price ||
-      !eventData.eventDate ||
-      !eventData.eventLocation ||
-      !eventData.eventMapURL ||
-      !eventData.imageURI ||
-      !eventData.createdBy.adminName ||
-      !eventData.createdBy.adminUid ||
-      // !eventData.createdBy.adminPhoto ||
-      !eventData.eventType
+    try {
+       if (
+      !eventName ||
+      !price ||
+      !eventDate ||
+      !eventLocation ||
+      !eventMapURL ||
+      !imageURI ||
+      !eventType
     ) {
       ToastAndroid.show('Please Enter all fields', ToastAndroid.SHORT);
-      return; 
+      return;
     }
+    setLoading(true)
 
-    
-    await firestore().collection('events').add({
-      EventName: eventData.eventName,
-      EventPrice: eventData.price,
-      EventDate: eventData.eventDate,
-      EventLocation: eventData.eventLocation,
-      EventMapURL: eventData.eventMapURL,
-      EventImage: eventData.imageURI,
-      EventAdminUid: eventData.createdBy.adminUid,
-      EventAdminName: eventData.createdBy.adminName,
-      EventAdminPhoto: eventData.createdBy.adminPhoto,
-      EventParticipates:eventData.participate,
-      EventType:eventData.eventType
-    });
+      let imageURII = imageURI;
+      let eventImageURL = '';
+      if (imageURII.startsWith('file://')) {
+      eventImageURL = await uploadImageToStorageAndGetDownloadURL(
+          imageURII,
+        );
+      }
 
-    ToastAndroid.show('Event created successfully!', ToastAndroid.SHORT);
-        setEventName('');
-        setPrice('');
-        setEventDate('');
-        setEventLocation('');
-        setEventType('');
-        setEventMapURL('');
-        setImageURI('');
-        setOptionModel(false);
-  } catch (error) {
-    console.error('Error creating event', error);
-    ToastAndroid.show('Error creating event', ToastAndroid.SHORT);
-  }
+      await firestore().collection('events').add({
+        EventName: eventName,
+        EventPrice: price,
+        EventDate: eventDate,
+        EventLocation: eventLocation,
+        EventMapURL: eventMapURL,
+        EventImage:eventImageURL,
+        EventAdminUid: adminUid,
+        EventAdminName:adminName,
+        EventAdminPhoto: adminPhoto,
+        EventParticipate:participate,
+        EventType:eventType
+
+      });
+ setLoading(false)
+      ToastAndroid.show('Event created successfully!', ToastAndroid.SHORT);
+      setEventDate('');
+      setImageURI('');
+      setEventLocation('');
+      setEventMapURL('');
+      setPrice('');
+      setEventName('');
+      setEventType("")
+    } catch (error: any) {
+      console.error('Error creating event:', error);
+      ToastAndroid.show('Error creating event', ToastAndroid.SHORT);
+    }
+  
+
+
+
 };
 
     const handleSelectImage = () => {
@@ -137,7 +142,9 @@ const Event = async () => {
     setParticipate,
      options,
   imageURI,
-  setImageURI
+  setImageURI,
+  loading,
+  setLoading
   }
 }
 

@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import React from 'react';
 import Upload from '../../../assets/images/Upload.png';
@@ -33,6 +34,7 @@ const CreateEvent = () => {
     setOptionModel,
     options,
     imageURI,
+    loading
   } = useCreateEvent();
 
   return (
@@ -177,6 +179,11 @@ const CreateEvent = () => {
             )}
           </TouchableOpacity>
         </View>
+        {loading && (
+          <View style={CreateEventStyle.loaderContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
         <TouchableOpacity onPress={Event} style={CreateEventStyle.botton}>
           <Text style={CreateEventStyle.bottontext}>Publish Events</Text>
         </TouchableOpacity>
