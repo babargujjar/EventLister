@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import React from 'react';
 import Upload from '../../../assets/images/Upload.png';
@@ -36,6 +37,8 @@ const EditEvent = ({route}: CardProp) => {
     options,
     imageURI,
     handleEditEvent,
+    loading,
+    setLoading
   } = useEditEvent({param});
 
   return (
@@ -178,6 +181,11 @@ const EditEvent = ({route}: CardProp) => {
             )}
           </TouchableOpacity>
         </View>
+        {loading && (
+          <View style={EditEventStyle.loaderContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
         <TouchableOpacity
           onPress={handleEditEvent}
           style={EditEventStyle.botton}>

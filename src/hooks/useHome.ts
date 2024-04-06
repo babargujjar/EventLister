@@ -19,40 +19,71 @@ const useHome = () => {
   const handleValuesChange = (newValues: number[]) => {
     setValues(newValues);
   };
-  // const dispatch = useAppDispatch()
+
+// useEffect(() => {
+//   const fetchEvents = async () => {
+//     try {
+//       const eventsRef = firestore().collection('events');
+//       const snapshot = await eventsRef.get();
+//       const eventData: any = [];
+
+//       await Promise.all(snapshot.docs.map(async (doc) => {
+//         const event = doc.data() ;
+//         if (event.EventImage && (event.EventImage.startsWith('gs://') || event.EventImage.startsWith('https://'))) {
+//           event.EventImageURL = event.EventImage;
+//         } else {
+//           // Check if image exists in storage
+//           const imageRef = storage().ref().child(event.EventImage);
+//           const exists = await imageRef.getMetadata().then(() => true).catch(() => false);
+//           if (exists) {
+//             const downloadURL = await imageRef.getDownloadURL();
+//             event.EventImageURL = downloadURL;
+//           } else {
+//             console.error(`Image not found at path: ${event.EventImage}`);
+//           }
+//         }
+//         eventData.push({ id: doc.id, ...event });
+//       }));
+
+//       setEvents(eventData);
+//     } catch (error) {
+//       console.error('Error fetching events:', error);
+//     }
+//   };
+
+//   fetchEvents();
+// }, []);
 
 useEffect(() => {
-  const fetchEvents = async () => {
-    try {
-      const eventsRef = firestore().collection('events');
-      const snapshot = await eventsRef.get();
-      const eventData: any = [];
+  const eventsRef = firestore().collection('events');
 
-      await Promise.all(snapshot.docs.map(async (doc) => {
-        const event = doc.data() ;
-        if (event.EventImage && (event.EventImage.startsWith('gs://') || event.EventImage.startsWith('https://'))) {
-          event.EventImageURL = event.EventImage;
-        } else {
-          // Check if image exists in storage
-          const imageRef = storage().ref().child(event.EventImage);
-          const exists = await imageRef.getMetadata().then(() => true).catch(() => false);
-          if (exists) {
-            const downloadURL = await imageRef.getDownloadURL();
+  const unsubscribe = eventsRef.onSnapshot(snapshot => {
+    const eventData: any = [];
+
+    snapshot.forEach(doc => {
+      const event = doc.data();
+      if (event.EventImage && (event.EventImage.startsWith('gs://') || event.EventImage.startsWith('https://'))) {
+        event.EventImageURL = event.EventImage;
+      } else {
+        // Check if image exists in storage
+        const imageRef = storage().ref().child(event.EventImage);
+        imageRef.getDownloadURL()
+          .then(downloadURL => {
             event.EventImageURL = downloadURL;
-          } else {
-            console.error(`Image not found at path: ${event.EventImage}`);
-          }
-        }
-        eventData.push({ id: doc.id, ...event });
-      }));
+          })
+          .catch(error => {
+            console.error(`Error fetching image URL for event: ${doc.id}`, error);
+          });
+      }
+      eventData.push({ id: doc.id, ...event });
+    });
 
-      setEvents(eventData);
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    }
-  };
+    setEvents(eventData);
+  }, error => {
+    console.error('Error fetching events:', error);
+  });
 
-  fetchEvents();
+  return () => unsubscribe();
 }, []);
 
 

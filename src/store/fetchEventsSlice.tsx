@@ -1,8 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {ToastAndroid} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {CreateEventState, Eventslice} from '../constant/types';
-import storage from '@react-native-firebase/storage';
 
 const initialState: any = {
   event: [],

@@ -9,30 +9,30 @@ const useMyPosting = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      setLoading(true);
-      try {
-        const eventsRef = firestore().collection('events');
-        const snapshot = await eventsRef
-          .where('EventAdminUid', '==', user)
-          .get();
-        if (snapshot.empty) {
-          ToastAndroid.show('You havent created any events yet. Get started by creating yourfirst event!',ToastAndroid.LONG);
-          return;
-        }
-        const eventsData: any = [];
-        snapshot.forEach(doc => {
-          eventsData.push({id: doc.id, ...doc.data()});
-        });
-        setUserEvents(eventsData);
-      } catch (error) {
-        console.error('Error fetching events: ', error);
-      }
-      setLoading(false);
-    };
+  const eventsRef = firestore().collection('events').where('EventAdminUid', '==', user);
 
-    fetchEvents();
-  }, [user]);
+  const unsubscribe = eventsRef.onSnapshot(snapshot => {
+    setLoading(true);
+    if (snapshot.empty) {
+      ToastAndroid.show('You haven\'t created any events yet. Get started by creating your first event!', ToastAndroid.LONG);
+      setLoading(false);
+      return;
+    }
+
+    const eventsData: any = [];
+    snapshot.forEach(doc => {
+      eventsData.push({ id: doc.id, ...doc.data() });
+    });
+    setUserEvents(eventsData);
+    setLoading(false);
+  }, error => {
+    console.error('Error fetching events: ', error);
+    setLoading(false);
+  });
+
+  return () => unsubscribe();
+}, [user]);
+
 
 
 

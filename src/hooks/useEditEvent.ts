@@ -26,6 +26,7 @@ const useEditEvent = ({param}:CardProps) => {
   const [optionModel, setOptionModel] = useState(false);
   const [eventMapURL, setEventMapURL] = useState('');
   const [imageURI, setImageURI] = useState('');
+    const [loading,setLoading] = useState(false)
 
   useEffect(() => {
     setEventName(param.EventName);
@@ -50,7 +51,7 @@ const useEditEvent = ({param}:CardProps) => {
       ToastAndroid.show('Please Enter all fields', ToastAndroid.SHORT);
       return;
     }
-
+setLoading(true)
     try {
       const updatedEventData = {
         EventName: eventName,
@@ -66,6 +67,7 @@ const useEditEvent = ({param}:CardProps) => {
         .collection('events')
         .doc(param.id)
         .update(updatedEventData);
+        setLoading(false)
       ToastAndroid.show('Event updated successfully!', ToastAndroid.SHORT);
       setEventName('');
           setPrice('');
@@ -114,7 +116,9 @@ const useEditEvent = ({param}:CardProps) => {
   setOptionModel,
   options,
   imageURI,
-    handleEditEvent
+    handleEditEvent,
+    loading,
+    setLoading
   }
   
 }
