@@ -6,14 +6,13 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-  ToastAndroid
+  ToastAndroid,
 } from 'react-native';
 import React, {useState} from 'react';
-import img from "../../../assets/images/Google.png"
-import { Signin, googleSignin } from '../../../store/authSlice';
+import img from '../../../assets/images/Google.png';
+import {Signin, googleSignin} from '../../../store/slice/authSlice';
 import {useAppDispatch} from '../../../hooks/hooks';
 import SignInStyle from './SignInStyle';
-
 
 const SignIn = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -97,5 +96,3 @@ const SignIn = ({navigation}: any) => {
 };
 
 export default SignIn;
-
-

@@ -11,11 +11,10 @@ import {
 } from 'react-native';
 import img from '../../../assets/images/Google.png';
 import {useAppDispatch, useAppSelector} from '../../../hooks/hooks';
-import {Signup, googleSignin} from '../../../store/authSlice';
+import {Signup, googleSignin} from '../../../store/slice/authSlice';
 import SignUpStyle from './SignUpStyle';
 
 const SignUp = ({navigation}: any) => {
-  
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword]: any = useState('');
@@ -112,5 +111,3 @@ const SignUp = ({navigation}: any) => {
 };
 
 export default SignUp;
-
-

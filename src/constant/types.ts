@@ -10,7 +10,7 @@ export type Event = {
   EventParticipate: number;
   EventPrice: string;
   EventType: string;
-  id: string;
+  id: any;
 };
 
 export type ItemEvent = {

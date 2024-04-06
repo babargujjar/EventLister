@@ -1,6 +1,6 @@
 import {launchImageLibrary} from 'react-native-image-picker';
-import { useAppDispatch } from './hooks';
-import { LogOut } from '../store/authSlice';
+import { useAppDispatch, useAppSelector } from './hooks';
+import { LogOut } from '../store/slice/authSlice';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { useEffect, useState } from 'react';

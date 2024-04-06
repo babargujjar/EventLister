@@ -39,7 +39,6 @@ const Home = ({navigation}: any) => {
     setOptionModel,
     eventType,
   } = useHome();
-  // console.log('recentEvent', recentEvent)
   const renderCustomMarker = (props: any) => (
     <>
       <View style={HomeStyle.customMarker}></View>

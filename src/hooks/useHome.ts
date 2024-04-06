@@ -2,14 +2,28 @@ import { useEffect, useState } from "react";
 import { ToastAndroid } from "react-native";
 import firestore from "@react-native-firebase/firestore"
 import storage from '@react-native-firebase/storage';
-
+import { useAppDispatch,useAppSelector } from "./hooks";
+import { fetchEvents } from "../store/slice/fetchEventsSlice";
+import { Event, EventsArray } from "../constant/types";
 
 const useHome = () => {
 
+// const dispatch = useAppDispatch()
+// const fetcheventsData = useAppSelector((state)=>{state.eventsData.events})
+// useEffect(()=>{
+// dispatch(fetchEvents())
+// },[dispatch])
+
+// console.log('fetcheventsData', fetcheventsData)
 
 
-  const [events, setEvents] = useState<any>([]);
-  const [sortedEvents, setSortedEvents] = useState<any>([]);
+
+// useEffect(()=>{
+//    setEvents(fetcheventsData);
+//   },[fetcheventsData])
+  
+  const [events, setEvents] = useState([]);
+  const [sortedEvents, setSortedEvents] = useState<Event[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [eventDate, setEventDate] = useState('');
   const [values, setValues] = useState([0, 5000]);
@@ -19,40 +33,6 @@ const useHome = () => {
   const handleValuesChange = (newValues: number[]) => {
     setValues(newValues);
   };
-
-// useEffect(() => {
-//   const fetchEvents = async () => {
-//     try {
-//       const eventsRef = firestore().collection('events');
-//       const snapshot = await eventsRef.get();
-//       const eventData: any = [];
-
-//       await Promise.all(snapshot.docs.map(async (doc) => {
-//         const event = doc.data() ;
-//         if (event.EventImage && (event.EventImage.startsWith('gs://') || event.EventImage.startsWith('https://'))) {
-//           event.EventImageURL = event.EventImage;
-//         } else {
-//           // Check if image exists in storage
-//           const imageRef = storage().ref().child(event.EventImage);
-//           const exists = await imageRef.getMetadata().then(() => true).catch(() => false);
-//           if (exists) {
-//             const downloadURL = await imageRef.getDownloadURL();
-//             event.EventImageURL = downloadURL;
-//           } else {
-//             console.error(`Image not found at path: ${event.EventImage}`);
-//           }
-//         }
-//         eventData.push({ id: doc.id, ...event });
-//       }));
-
-//       setEvents(eventData);
-//     } catch (error) {
-//       console.error('Error fetching events:', error);
-//     }
-//   };
-
-//   fetchEvents();
-// }, []);
 
 useEffect(() => {
   const eventsRef = firestore().collection('events');
@@ -65,7 +45,6 @@ useEffect(() => {
       if (event.EventImage && (event.EventImage.startsWith('gs://') || event.EventImage.startsWith('https://'))) {
         event.EventImageURL = event.EventImage;
       } else {
-        // Check if image exists in storage
         const imageRef = storage().ref().child(event.EventImage);
         imageRef.getDownloadURL()
           .then(downloadURL => {
@@ -85,7 +64,6 @@ useEffect(() => {
 
   return () => unsubscribe();
 }, []);
-
 
 
   const options = [
@@ -129,7 +107,7 @@ useEffect(() => {
     if (!events || events.length === 0) {
       return null;
     }
-    events.sort((a: any, b: any) => new Date(b.date) as any - new Date(a.date));
+    events.sort((a, b) => new Date(b.date) as any - new Date(a.date));
     return events[0];
   }
   
