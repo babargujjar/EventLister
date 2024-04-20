@@ -2,17 +2,19 @@ import {
   View,
   Text,
   ScrollView,
-  TextInput,
   TouchableOpacity,
   Image,
   ActivityIndicator,
 } from 'react-native';
 import React from 'react';
-import Upload from '../../../assets/images/Upload.png';
+import Upload from '../../assets/images/Upload.png';
 import {FlatList} from 'react-native-gesture-handler';
-import Arrow from '../../../assets/images/ArrowRight.png';
+import Arrow from '../../assets/images/ArrowRight.png';
 import CreateEventStyle from './CreateEventStyle';
-import useCreateEvent from '../../../hooks/useCreateEvent';
+import useCreateEvent from '../../hooks/useCreateEvent';
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
+import EventTypeOptions from '../../components/eventTypeOptoins/EventTypeOptions';
 
 const CreateEvent = () => {
   const {
@@ -34,7 +36,7 @@ const CreateEvent = () => {
     setOptionModel,
     options,
     imageURI,
-    loading
+    loading,
   } = useCreateEvent();
 
   return (
@@ -47,15 +49,14 @@ const CreateEvent = () => {
           <View style={CreateEventStyle.inputview}>
             <Text style={CreateEventStyle.nametext}>Event Name</Text>
             <View>
-              <TextInput
+              <Input
                 autoCorrect={true}
                 style={CreateEventStyle.input}
                 placeholder="Enter Name"
                 keyboardType="default"
                 placeholderTextColor="#171B2E"
                 value={eventName}
-                onChangeText={value => setEventName(value)}
-              />
+                onChangeText={(value: React.SetStateAction<string>) => setEventName(value)} secureTextEntry={undefined} editable={true}              />
             </View>
           </View>
         </View>
@@ -63,14 +64,13 @@ const CreateEvent = () => {
           <View style={CreateEventStyle.inputview}>
             <Text style={CreateEventStyle.nametext}>Price</Text>
             <View>
-              <TextInput
+              <Input
                 style={CreateEventStyle.input}
-                onChangeText={value => setPrice(value)}
+                onChangeText={(value: React.SetStateAction<string>) => setPrice(value)}
                 value={price}
                 placeholder="$ 0.00"
                 keyboardType="decimal-pad"
-                placeholderTextColor="#171B2E"
-              />
+                placeholderTextColor="#171B2E" autoCorrect={false} secureTextEntry={undefined} editable={true}              />
             </View>
           </View>
         </View>
@@ -78,14 +78,13 @@ const CreateEvent = () => {
           <View style={CreateEventStyle.inputview}>
             <Text style={CreateEventStyle.nametext}>Event Date</Text>
             <View>
-              <TextInput
+              <Input
                 style={CreateEventStyle.input}
-                onChangeText={value => setEventDate(value)}
+                onChangeText={(value: React.SetStateAction<string>) => setEventDate(value)}
                 value={eventDate}
                 placeholder="Enter Event Date (dd Month yyyy)"
                 keyboardType="default"
-                placeholderTextColor="#171B2E"
-              />
+                placeholderTextColor="#171B2E" autoCorrect={false} secureTextEntry={undefined} editable={true}              />
             </View>
           </View>
         </View>
@@ -93,36 +92,21 @@ const CreateEvent = () => {
           <View style={CreateEventStyle.inputview}>
             <Text style={CreateEventStyle.nametext}>Event Type</Text>
             <TouchableOpacity onPress={() => setOptionModel(true)}>
-              <TextInput
+              <Input
                 style={CreateEventStyle.input}
-                onChangeText={value => setEventType(value)}
+                onChangeText={(value: React.SetStateAction<string>) => setEventType(value)}
                 value={eventType}
                 placeholder="Select Event Type"
                 keyboardType="default"
                 placeholderTextColor="#171B2E"
-                editable={false}
-              />
+                editable={false} autoCorrect={false} secureTextEntry={false}              />
               <View style={CreateEventStyle.arrow}>
                 <Image style={CreateEventStyle.arrowimg} source={Arrow} />
               </View>
             </TouchableOpacity>
           </View>
           {optionModel && (
-            <View style={CreateEventStyle.optionModel}>
-              <FlatList
-                data={options}
-                renderItem={({item}) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setEventType(item);
-                      setOptionModel(false);
-                    }}>
-                    <Text style={CreateEventStyle.optionText}>{item}</Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </View>
+            <EventTypeOptions prop={{options,setEventType,setOptionModel}} />
           )}
         </View>
 
@@ -130,14 +114,13 @@ const CreateEvent = () => {
           <View style={CreateEventStyle.inputview}>
             <Text style={CreateEventStyle.nametext}>Event Location</Text>
             <View>
-              <TextInput
+              <Input
                 style={CreateEventStyle.input}
-                onChangeText={value => setEventLocation(value)}
+                onChangeText={(value: React.SetStateAction<string>) => setEventLocation(value)}
                 value={eventLocation}
                 placeholder="Event Location"
                 keyboardType="default"
-                placeholderTextColor="#171B2E"
-              />
+                placeholderTextColor="#171B2E" autoCorrect={false} secureTextEntry={undefined} editable={true}              />
             </View>
           </View>
         </View>
@@ -147,14 +130,13 @@ const CreateEvent = () => {
               Event Map Location URL
             </Text>
             <View>
-              <TextInput
+              <Input
                 style={CreateEventStyle.input}
-                onChangeText={value => setEventMapURL(value)}
+                onChangeText={(value: React.SetStateAction<string>) => setEventMapURL(value)}
                 value={eventMapURL}
                 placeholder="URL"
                 keyboardType="url"
-                placeholderTextColor="#171B2E"
-              />
+                placeholderTextColor="#171B2E" autoCorrect={false} secureTextEntry={false} editable={true}              />
             </View>
           </View>
         </View>
@@ -184,9 +166,9 @@ const CreateEvent = () => {
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
         )}
-        <TouchableOpacity onPress={Event} style={CreateEventStyle.botton}>
+        <Button onPress={Event} style={CreateEventStyle.botton}>
           <Text style={CreateEventStyle.bottontext}>Publish Events</Text>
-        </TouchableOpacity>
+        </Button>
       </View>
     </ScrollView>
   );

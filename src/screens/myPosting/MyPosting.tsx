@@ -7,11 +7,11 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import search from '../../../assets/images/Search.png';
-import Card from '../../../components/card/Card';
-import {ItemEvent} from '../../../constant/types';
+import search from '../../assets/images/Search.png';
+import Card from '../../components/card/Card';
+import {ItemEvent} from '../../constant/types';
 import MyPostingStyle from './MyPostingStyle';
-import useMyPosting from '../../../hooks/useMyPosting';
+import useMyPosting from '../../hooks/useMyPosting';
 
 const MyPosting = ({navigation}: any) => {
   const renderEventCard = ({item}: ItemEvent) => {

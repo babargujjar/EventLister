@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
 
 const HomeStyle = StyleSheet.create({
   container: {
@@ -210,7 +210,7 @@ const HomeStyle = StyleSheet.create({
   optionModel: {
     position: 'absolute',
     zIndex: 999,
-    top: -110,
+    top: -40,
     right: 0,
     backgroundColor: '#FFFFFF',
     borderRadius: 10,

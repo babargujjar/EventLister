@@ -1,6 +1,6 @@
-import {View, Text, ScrollView, StyleSheet, Image} from 'react-native';
+import {View, Text, ScrollView, Image} from 'react-native';
 import React from 'react';
-import arrowleft from '../../../assets/images/arrow-left-white.png';
+import arrowleft from '../../assets/images/arrow-left-white.png';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import TicketDetailStyle from './TicketDetailStyle';
 

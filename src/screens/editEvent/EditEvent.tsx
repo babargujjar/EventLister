@@ -2,18 +2,20 @@ import {
   View,
   Text,
   ScrollView,
-  TextInput,
   TouchableOpacity,
   Image,
   ActivityIndicator,
 } from 'react-native';
 import React from 'react';
-import Upload from '../../../assets/images/Upload.png';
+import Upload from '../../assets/images/Upload.png';
 import {FlatList} from 'react-native-gesture-handler';
-import Arrow from '../../../assets/images/ArrowRight.png';
-import {CardProp} from '../../../constant/types';
+import Arrow from '../../assets/images/ArrowRight.png';
+import {CardProp} from '../../constant/types';
 import EditEventStyle from './EditEventStyle';
-import useEditEvent from '../../../hooks/useEditEvent';
+import useEditEvent from '../../hooks/useEditEvent';
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
+import EventTypeOptions from '../../components/eventTypeOptoins/EventTypeOptions';
 
 const EditEvent = ({route}: CardProp) => {
   const {param} = route.params;
@@ -38,7 +40,7 @@ const EditEvent = ({route}: CardProp) => {
     imageURI,
     handleEditEvent,
     loading,
-    setLoading
+    setLoading,
   } = useEditEvent({param});
 
   return (
@@ -51,14 +53,18 @@ const EditEvent = ({route}: CardProp) => {
           <View style={EditEventStyle.inputview}>
             <Text style={EditEventStyle.nametext}>Event Name</Text>
             <View>
-              <TextInput
+              <Input
                 autoCorrect={true}
                 style={EditEventStyle.input}
                 placeholder="Enter Name"
                 keyboardType="default"
                 placeholderTextColor="#171B2E"
                 value={eventName}
-                onChangeText={value => setEventName(value)}
+                onChangeText={(value: React.SetStateAction<string>) =>
+                  setEventName(value)
+                }
+                secureTextEntry={false}
+                editable={true}
               />
             </View>
           </View>
@@ -67,13 +73,18 @@ const EditEvent = ({route}: CardProp) => {
           <View style={EditEventStyle.inputview}>
             <Text style={EditEventStyle.nametext}>Price</Text>
             <View>
-              <TextInput
+              <Input
                 style={EditEventStyle.input}
-                onChangeText={value => setPrice(value)}
+                onChangeText={(value: React.SetStateAction<string>) =>
+                  setPrice(value)
+                }
                 value={price}
                 placeholder="$ 0.00"
                 keyboardType="decimal-pad"
                 placeholderTextColor="#171B2E"
+                autoCorrect={false}
+                secureTextEntry={false}
+                editable={true}
               />
             </View>
           </View>
@@ -82,13 +93,16 @@ const EditEvent = ({route}: CardProp) => {
           <View style={EditEventStyle.inputview}>
             <Text style={EditEventStyle.nametext}>Event Date</Text>
             <View>
-              <TextInput
+              <Input
                 style={EditEventStyle.input}
                 onChangeText={value => setEventDate(value)}
                 value={eventDate}
                 placeholder="Enter Event Date (dd Month yyyy)"
                 keyboardType="default"
                 placeholderTextColor="#171B2E"
+                autoCorrect={false}
+                secureTextEntry={false}
+                editable={true}
               />
             </View>
           </View>
@@ -97,14 +111,16 @@ const EditEvent = ({route}: CardProp) => {
           <View style={EditEventStyle.inputview}>
             <Text style={EditEventStyle.nametext}>Event Type</Text>
             <TouchableOpacity onPress={() => setOptionModel(true)}>
-              <TextInput
+              <Input
                 style={EditEventStyle.input}
                 onChangeText={value => setEventType(value)}
                 value={eventType}
                 placeholder="Select Event Type"
                 keyboardType="default"
                 placeholderTextColor="#171B2E"
-                editable={false} // to prevent direct editing of TextInput
+                editable={false} // to prevent direct editing of Input
+                autoCorrect={false}
+                secureTextEntry={false}
               />
               <View style={EditEventStyle.arrow}>
                 <Image style={EditEventStyle.arrowimg} source={Arrow} />
@@ -112,21 +128,7 @@ const EditEvent = ({route}: CardProp) => {
             </TouchableOpacity>
           </View>
           {optionModel && (
-            <View style={EditEventStyle.optionModel}>
-              <FlatList
-                data={options}
-                renderItem={({item}) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setEventType(item);
-                      setOptionModel(false);
-                    }}>
-                    <Text style={EditEventStyle.optionText}>{item}</Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </View>
+            <EventTypeOptions prop={{options, setEventType, setOptionModel}} />
           )}
         </View>
 
@@ -134,13 +136,16 @@ const EditEvent = ({route}: CardProp) => {
           <View style={EditEventStyle.inputview}>
             <Text style={EditEventStyle.nametext}>Event Location</Text>
             <View>
-              <TextInput
+              <Input
                 style={EditEventStyle.input}
                 onChangeText={value => setEventLocation(value)}
                 value={eventLocation}
                 placeholder="Event Location"
                 keyboardType="default"
                 placeholderTextColor="#171B2E"
+                autoCorrect={false}
+                secureTextEntry={false}
+                editable={true}
               />
             </View>
           </View>
@@ -149,13 +154,16 @@ const EditEvent = ({route}: CardProp) => {
           <View style={EditEventStyle.inputview}>
             <Text style={EditEventStyle.nametext}>Event Map Location URL</Text>
             <View>
-              <TextInput
+              <Input
                 style={EditEventStyle.input}
                 onChangeText={value => setEventMapURL(value)}
                 value={eventMapURL}
                 placeholder="URL"
                 keyboardType="url"
                 placeholderTextColor="#171B2E"
+                autoCorrect={false}
+                secureTextEntry={false}
+                editable={true}
               />
             </View>
           </View>
@@ -186,11 +194,9 @@ const EditEvent = ({route}: CardProp) => {
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
         )}
-        <TouchableOpacity
-          onPress={handleEditEvent}
-          style={EditEventStyle.botton}>
+        <Button onPress={handleEditEvent} style={EditEventStyle.botton}>
           <Text style={EditEventStyle.bottontext}>Edit Events</Text>
-        </TouchableOpacity>
+        </Button>
       </View>
     </ScrollView>
   );

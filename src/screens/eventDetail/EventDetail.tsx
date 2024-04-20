@@ -1,11 +1,12 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity, FlatList} from 'react-native';
-import arrowleft from '../../../assets/images/arrow-left.png';
-import map from '../../../assets/images/map.jpeg';
-import mapicon from '../../../assets/images/mapicon.png';
+import arrowleft from '../../assets/images/arrow-left.png';
+import map from '../../assets/images/map.jpeg';
+import mapicon from '../../assets/images/mapicon.png';
 import EventDetailStyle from './EventDetailStyle';
-import useEventDetail from '../../../hooks/useEventDetail';
-import images from '../../../assets/images/images.jpg';
+import useEventDetail from '../../hooks/useEventDetail';
+import images from '../../assets/images/images.jpg';
+import Button from '../../components/button/Button';
 
 const EventDetail = ({navigation, route}: any) => {
   const {param} = route.params;
@@ -71,11 +72,11 @@ const EventDetail = ({navigation, route}: any) => {
               <Text>Direct map</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
+          <Button
             onPress={addParticipate}
             style={EventDetailStyle.botton}>
             <Text style={EventDetailStyle.bottontext}>Buy Ticket</Text>
-          </TouchableOpacity>
+          </Button>
         </View>
       )}
       keyExtractor={(item, index) => index.toString()}

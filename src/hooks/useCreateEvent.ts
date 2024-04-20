@@ -32,6 +32,7 @@ const useCreateEvent = () => {
   const  adminName = auth().currentUser?.displayName
   const  adminPhoto = auth().currentUser?.photoURL
   const  adminUid = auth().currentUser?.uid
+  
   const uploadImageToStorageAndGetDownloadURL = async (
   imageURII: string,
 ): Promise<string> => {

@@ -5,22 +5,23 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  TextInput,
 } from 'react-native';
-import arrowleft from '../../../assets/images/arrow-left.png';
+import arrowleft from '../../assets/images/arrow-left.png';
 import ResetPasswordStyle from './ResetPasswordStyle';
-import useResetPassword from '../../../hooks/useResetPassword';
+import useResetPassword from '../../hooks/useResetPassword';
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
 
 const ResetPassword = ({navigation}: any) => {
-const {
-  resetPassword,
-  currentPass,
-  setCurrentPass,
-  newPassword,
-  setNewPassword,
-  confirmPass,
-  setConfirmPass,
-} = useResetPassword();
+  const {
+    resetPassword,
+    currentPass,
+    setCurrentPass,
+    newPassword,
+    setNewPassword,
+    confirmPass,
+    setConfirmPass,
+  } = useResetPassword();
 
   return (
     <ScrollView>
@@ -37,48 +38,49 @@ const {
           <View style={ResetPasswordStyle.inputview}>
             <Text style={ResetPasswordStyle.nametext}>Old Password</Text>
             <View>
-              <TextInput
+              <Input
                 style={ResetPasswordStyle.input}
                 value={currentPass}
                 onChangeText={setCurrentPass}
                 placeholder="Old Password"
                 placeholderTextColor="#171B2E"
-                secureTextEntry={true}
-              />
+                secureTextEntry={true} keyboardType={undefined} editable={undefined} autoCorrect={false}              />
             </View>
           </View>
           <View style={ResetPasswordStyle.inputview}>
             <Text style={ResetPasswordStyle.nametext}>New Password</Text>
             <View>
-              <TextInput
+              <Input
                 style={ResetPasswordStyle.input}
                 value={newPassword}
                 onChangeText={setNewPassword}
                 placeholder="New Password"
                 placeholderTextColor="#171B2E"
-                secureTextEntry={true}
-              />
+                secureTextEntry={true} keyboardType={undefined} editable={true} autoCorrect={false} />
             </View>
           </View>
           <View style={ResetPasswordStyle.inputview}>
-            <Text style={ResetPasswordStyle.nametext}>Confirm New Password</Text>
+            <Text style={ResetPasswordStyle.nametext}>
+              Confirm New Password
+            </Text>
             <View>
-              <TextInput
+              <Input
                 style={ResetPasswordStyle.input}
                 value={confirmPass}
                 onChangeText={setConfirmPass}
                 placeholder="Confirm New Password"
                 placeholderTextColor="#171B2E"
-                secureTextEntry={true}
-              />
+                secureTextEntry={true} keyboardType={undefined} editable={true} autoCorrect={false}              />
             </View>
           </View>
         </View>
-        <TouchableOpacity style={ResetPasswordStyle.botton} onPress={resetPassword}>
+        <Button
+          style={ResetPasswordStyle.botton}
+          onPress={resetPassword}>
           <Text style={[ResetPasswordStyle.bottontext, {color: '#FFFFFF'}]}>
             Reset Password
           </Text>
-        </TouchableOpacity>
+        </Button>
       </View>
     </ScrollView>
   );

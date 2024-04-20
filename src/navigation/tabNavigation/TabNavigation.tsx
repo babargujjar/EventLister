@@ -1,11 +1,10 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from '../../screens/frontend/home/Home';
-import MyPosting from '../../screens/frontend/myPosting/MyPosting';
-import CreateEvent from '../../screens/frontend/createEvent/CreateEvent';
-import {Image,View} from 'react-native';
-import SortedEvents from '../../screens/frontend/sortedEvents/SortedEvents';
-import Profile from '../../screens/frontend/profile/Profile';
-
+import Home from '../../screens/home/Home';
+import MyPosting from '../../screens/myPosting/MyPosting';
+import CreateEvent from '../../screens/createEvent/CreateEvent';
+import {Image, View} from 'react-native';
+import SortedEvents from '../../screens/sortedEvents/SortedEvents';
+import Profile from '../../screens/profile/Profile';
 
 const Tab = createBottomTabNavigator();
 

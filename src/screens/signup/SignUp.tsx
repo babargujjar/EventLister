@@ -2,17 +2,17 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   Image,
   ToastAndroid,
 } from 'react-native';
-import img from '../../../assets/images/Google.png';
-import {useAppDispatch, useAppSelector} from '../../../hooks/hooks';
-import {Signup, googleSignin} from '../../../store/slice/authSlice';
+import img from '../../assets/images/Google.png';
+import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
+import {Signup, googleSignin} from '../../store/slice/authSlice';
 import SignUpStyle from './SignUpStyle';
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
 
 const SignUp = ({navigation}: any) => {
   const [name, setName] = useState<string>('');
@@ -48,37 +48,34 @@ const SignUp = ({navigation}: any) => {
         <View style={SignUpStyle.inputview}>
           <Text style={SignUpStyle.nametext}>Name</Text>
           <View>
-            <TextInput
-              onChangeText={value => setName(value)}
+            <Input
+              onChangeText={(value: React.SetStateAction<string>) => setName(value)}
               value={name}
               style={SignUpStyle.input}
               placeholder="Enter Name Here"
-              keyboardType="default"
-            />
+              keyboardType="default" placeholderTextColor={undefined} secureTextEntry={undefined} editable={true} autoCorrect={false}            />
           </View>
         </View>
         <View style={SignUpStyle.inputview}>
           <Text style={SignUpStyle.nametext}>Email</Text>
           <View>
-            <TextInput
-              onChangeText={value => setEmail(value)}
+            <Input
+              onChangeText={(value: React.SetStateAction<string>) => setEmail(value)}
               value={email}
               style={SignUpStyle.input}
               placeholder="Enter Email Here"
-              keyboardType="email-address"
-            />
+              keyboardType="email-address" placeholderTextColor={undefined} secureTextEntry={undefined} editable={true} autoCorrect={false}            />
           </View>
         </View>
         <View style={SignUpStyle.inputview}>
           <Text style={SignUpStyle.nametext}>Password</Text>
           <View>
-            <TextInput
+            <Input
               style={SignUpStyle.input}
-              onChangeText={value => setPassword(value)}
+              onChangeText={(value: any) => setPassword(value)}
               value={password}
               placeholder="Enter Password Here"
-              secureTextEntry={true}
-            />
+              secureTextEntry={true} placeholderTextColor={undefined} keyboardType={undefined} editable={true} autoCorrect={false}            />
           </View>
         </View>
       </View>
@@ -91,9 +88,9 @@ const SignUp = ({navigation}: any) => {
           <Text style={{color: '#6F3DE9'}}>Login Instead</Text>
         </TouchableOpacity>
       </Text>
-      <TouchableOpacity style={SignUpStyle.button} onPress={signup}>
+      <Button style={SignUpStyle.button} onPress={signup}>
         <Text style={SignUpStyle.text}>Create a New Account</Text>
-      </TouchableOpacity>
+      </Button>
       <View style={SignUpStyle.OR}>
         <View
           style={{borderBottomWidth: 1, borderColor: '#00000', flex: 1}}></View>

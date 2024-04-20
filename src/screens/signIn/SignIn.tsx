@@ -2,17 +2,18 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   Image,
   ToastAndroid,
 } from 'react-native';
 import React, {useState} from 'react';
-import img from '../../../assets/images/Google.png';
-import {Signin, googleSignin} from '../../../store/slice/authSlice';
-import {useAppDispatch} from '../../../hooks/hooks';
+import img from '../../assets/images/Google.png';
+import {Signin, googleSignin} from '../../store/slice/authSlice';
+import {useAppDispatch} from '../../hooks/hooks';
 import SignInStyle from './SignInStyle';
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
 
 const SignIn = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -48,25 +49,23 @@ const SignIn = ({navigation}: any) => {
           <View style={SignInStyle.inputview}>
             <Text style={SignInStyle.nametext}>Email</Text>
             <View>
-              <TextInput
+              <Input
                 style={SignInStyle.input}
                 placeholder="Enter Email Here"
                 keyboardType="email-address"
-                onChangeText={value => setEmail(value)}
-                value={email}
-              />
+                onChangeText={(value: React.SetStateAction<string>) => setEmail(value)}
+                value={email} placeholderTextColor={undefined} secureTextEntry={false} editable={true} autoCorrect={false}              />
             </View>
           </View>
           <View style={SignInStyle.inputview}>
             <Text style={SignInStyle.nametext}>Password</Text>
             <View>
-              <TextInput
+              <Input
                 style={SignInStyle.input}
-                onChangeText={value => setPassword(value)}
+                onChangeText={(value: React.SetStateAction<string>) => setPassword(value)}
                 value={password}
                 placeholder="Enter Password Here"
-                secureTextEntry={true}
-              />
+                secureTextEntry={true} placeholderTextColor={undefined} keyboardType={"password"} editable={true} autoCorrect={false}              />
             </View>
           </View>
         </View>
@@ -79,9 +78,9 @@ const SignIn = ({navigation}: any) => {
             <Text style={{color: '#6F3DE9'}}>SignUp Instead</Text>
           </TouchableOpacity>
         </Text>
-        <TouchableOpacity style={SignInStyle.button} onPress={signin}>
+        <Button style={SignInStyle.button} onPress={signin}>
           <Text style={SignInStyle.text}>Sign In</Text>
-        </TouchableOpacity>
+        </Button>
         <View style={SignInStyle.OR}>
           <View style={SignInStyle.empty}></View>
           <Text style={{color: '#171B2E', fontSize: 14}}>OR</Text>

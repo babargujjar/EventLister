@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import EventDetail from '../../screens/frontend/eventDetail/EventDetail';
-import TicketDetail from '../../screens/frontend/ticketDetail/TicketDetail';
+import EventDetail from '../../screens/eventDetail/EventDetail';
+import TicketDetail from '../../screens/ticketDetail/TicketDetail';
 import TabNavigation from '../tabNavigation/TabNavigation';
-import ResetPassword from '../../screens/frontend/resetPassword/ResetPassword';
-import SignIn from '../../screens/auth/signIn/SignIn';
-import SignUp from '../../screens/auth/signup/SignUp';
+import ResetPassword from '../../screens/resetPassword/ResetPassword';
+import SignIn from '../../screens/signIn/SignIn';
+import SignUp from '../../screens/signup/SignUp';
 import auth from '@react-native-firebase/auth';
-import EditEvent from '../../screens/frontend/editEvent/EditEvent';
+import EditEvent from '../../screens/editEvent/EditEvent';
 
 const StackNavigation = () => {
-
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
@@ -21,7 +20,7 @@ const StackNavigation = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; 
+    return subscriber;
   }, []);
   const Stack = createNativeStackNavigator();
   if (initializing) return null;
@@ -75,7 +74,6 @@ const StackNavigation = () => {
           name="EditEvent"
           component={EditEvent}
         />
-        
       </Stack.Group>
     </Stack.Navigator>
   );

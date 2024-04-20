@@ -1,6 +1,6 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
 
-const EditEventStyle = StyleSheet.create({
+const CreateEventStyle = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
@@ -12,7 +12,7 @@ const EditEventStyle = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 28,
     textAlign: 'center',
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Bold',
   },
   inputview: {
     height: 82,
@@ -27,6 +27,7 @@ const EditEventStyle = StyleSheet.create({
     borderRadius: 26,
     backgroundColor: '#F9F9F9',
     paddingLeft: 16,
+    fontFamily: 'Poppins',
   },
   nametext: {
     color: '#171B2E',
@@ -35,13 +36,15 @@ const EditEventStyle = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 18.2,
+    fontFamily: 'Poppins',
   },
-  textInput: {
+  Input: {
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
     marginBottom: 20,
     width: '80%',
+    fontFamily: 'Poppins',
   },
   botton: {
     height: 52,
@@ -57,6 +60,7 @@ const EditEventStyle = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18,
     color: '#FFFFFF',
+    fontFamily: 'Poppins',
   },
   inputimg: {
     height: 161,
@@ -88,6 +92,7 @@ const EditEventStyle = StyleSheet.create({
     fontSize: 16,
     color: '#000000',
     padding: 10,
+    fontFamily: 'Poppins',
   },
   arrow: {
     position: 'absolute',
@@ -110,5 +115,4 @@ const EditEventStyle = StyleSheet.create({
   },
 });
 
-
-export default EditEventStyle;
+export default CreateEventStyle;

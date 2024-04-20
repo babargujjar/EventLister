@@ -49,7 +49,7 @@ export const fetchEvents = createAsyncThunk(
       });
 
       dispatch(setEvents(eventData));
-      console.log('eventData', eventData)
+      // console.log('eventData', eventData)
     } catch (error) {
       console.error('Error fetching events: ', error);
       throw error;

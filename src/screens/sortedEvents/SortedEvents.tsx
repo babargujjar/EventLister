@@ -1,17 +1,11 @@
 import React from 'react';
-import {
-  View,
-  ScrollView,
-  Image,
-  Text,
-} from 'react-native';
-import FilterIcon from '../../../assets/images/Filter.png';
-import SearchIcon from '../../../assets/images/Search.png';
-import FilterdEvents from '../../../components/filteredEvents/FilteredEvents';
+import {View, ScrollView, Image, Text} from 'react-native';
+import FilterIcon from '../../assets/images/Filter.png';
+import SearchIcon from '../../assets/images/Search.png';
+import FilterdEvents from '../../components/filteredEvents/FilteredEvents';
 import SortedEventsStyle from './SortedEventsStyle';
 
 const SortedEvents = () => {
-
   return (
     <ScrollView style={SortedEventsStyle.container}>
       <View style={SortedEventsStyle.content}>
@@ -26,10 +20,8 @@ const SortedEvents = () => {
         <Text style={SortedEventsStyle.ongoingEventsText}>Ongoing Events</Text>
         <FilterdEvents />
       </View>
-      
     </ScrollView>
   );
 };
-
 
 export default SortedEvents;

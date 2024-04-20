@@ -4,14 +4,15 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  TextInput,
   ActivityIndicator,
 } from 'react-native';
 import React from 'react';
-import editimg from '../../../assets/images/Discoveryfocused.png';
-import images from '../../../assets/images/images.jpg';
+import editimg from '../../assets/images/Discoveryfocused.png';
+import images from '../../assets/images/images.jpg';
 import ProfileStyle from './ProfileStyle';
-import useProfile from '../../../hooks/useProfile';
+import useProfile from '../../hooks/useProfile';
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
 
 const Profile = ({navigation}: any) => {
   const {
@@ -23,9 +24,9 @@ const Profile = ({navigation}: any) => {
     displayName,
     setDisplayName,
     loading,
-    setLoading
+    setLoading,
   } = useProfile();
-  
+
   return (
     <ScrollView>
       <View style={ProfileStyle.container}>
@@ -53,14 +54,15 @@ const Profile = ({navigation}: any) => {
           <View style={ProfileStyle.inputview}>
             <Text style={ProfileStyle.nametext}>Name</Text>
             <View>
-              <TextInput
+              <Input
                 style={ProfileStyle.input}
                 value={displayName}
                 onChangeText={setDisplayName}
                 placeholder="User Name"
                 placeholderTextColor="#171B2E"
                 keyboardType="default"
-              />
+                secureTextEntry={false}
+                editable={true} autoCorrect={false}              />
             </View>
           </View>
         </View>
@@ -69,13 +71,15 @@ const Profile = ({navigation}: any) => {
           <View style={ProfileStyle.inputview}>
             <Text style={ProfileStyle.nametext}>Email</Text>
             <View>
-              <TextInput
+              <Input
                 style={ProfileStyle.input}
                 value={userData ? userData?.email : ''}
                 placeholder="Email"
                 placeholderTextColor="#171B2E"
                 keyboardType="email-address"
-              />
+                secureTextEntry={false}
+                onChangeText={() => { } }
+                editable={true} autoCorrect={false}              />
             </View>
           </View>
         </View>
@@ -84,14 +88,14 @@ const Profile = ({navigation}: any) => {
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
         )}
-        <TouchableOpacity
+        <Button
           style={ProfileStyle.botton}
           onPress={handleUpdateProfile}>
           <Text style={(ProfileStyle.bottontext, {color: '#FFFFFF'})}>
             Update Profile
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </Button>
+        <Button
           style={ProfileStyle.botton2}
           onPress={() => {
             navigation.navigate('ResetPassword');
@@ -99,7 +103,7 @@ const Profile = ({navigation}: any) => {
           <Text style={(ProfileStyle.bottontext, {color: '#6F3DE9'})}>
             Reset Password
           </Text>
-        </TouchableOpacity>
+        </Button>
       </View>
     </ScrollView>
   );
