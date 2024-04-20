@@ -1,28 +1,13 @@
 import { useEffect, useState } from "react";
 import { ToastAndroid } from "react-native";
-import firestore from "@react-native-firebase/firestore"
-import storage from '@react-native-firebase/storage';
 import { useAppDispatch,useAppSelector } from "./hooks";
-import { fetchEvents } from "../store/slice/fetchEventsSlice";
-import { Event, EventsArray } from "../constant/types";
+import { Event, } from "../constant/types";
+import { fetchEvents } from "../store/slice/EventsSlice";
 
 const useHome = () => {
 
-// const dispatch = useAppDispatch()
-// const fetcheventsData = useAppSelector((state)=>{state.eventsData.events})
-// useEffect(()=>{
-// dispatch(fetchEvents())
-// },[dispatch])
-
-// console.log('fetcheventsData', fetcheventsData)
-
-
-
-// useEffect(()=>{
-//    setEvents(fetcheventsData);
-//   },[fetcheventsData])
   
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [sortedEvents, setSortedEvents] = useState<Event[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [eventDate, setEventDate] = useState('');
@@ -34,36 +19,21 @@ const useHome = () => {
     setValues(newValues);
   };
 
+
+const dispatch = useAppDispatch();
+
 useEffect(() => {
-  const eventsRef = firestore().collection('events');
+  const fetchData = async () => {
+    await dispatch(fetchEvents());
+  };
+  fetchData(); 
+}, [dispatch]);
 
-  const unsubscribe = eventsRef.onSnapshot(snapshot => {
-    const eventData: any = [];
+const Data = useAppSelector(state => state.events.events);
 
-    snapshot.forEach(doc => {
-      const event = doc.data();
-      if (event.EventImage && (event.EventImage.startsWith('gs://') || event.EventImage.startsWith('https://'))) {
-        event.EventImageURL = event.EventImage;
-      } else {
-        const imageRef = storage().ref().child(event.EventImage);
-        imageRef.getDownloadURL()
-          .then(downloadURL => {
-            event.EventImageURL = downloadURL;
-          })
-          .catch(error => {
-            console.error(`Error fetching image URL for event: ${doc.id}`, error);
-          });
-      }
-      eventData.push({ id: doc.id, ...event });
-    });
-
-    setEvents(eventData);
-  }, error => {
-    console.error('Error fetching events:', error);
-  });
-
-  return () => unsubscribe();
-}, []);
+useEffect(()=>{
+   setEvents([...Data]);
+},[Data])
 
 
   const options = [

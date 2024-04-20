@@ -1,7 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {LogOut, Signin, Signup, googleSignin} from './slice/authSlice';
-import fetchEventsSlice from './slice/fetchEventsSlice';
-
+import fetchEventsSlice from './slice/EventsSlice';
+import eventsReducer  from './slice/EventsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,25 +10,10 @@ export const store = configureStore({
     googleSignIn: googleSignin,
     logOut: LogOut,
     eventsData: fetchEventsSlice,
+    events: eventsReducer,
   },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
-// import {configureStore} from '@reduxjs/toolkit';
-// import fetchEventsSlice from './slice/fetchEventsSlice';
-// const store = configureStore({
-//   reducer: {
-//     events: fetchEventsSlice,
-//   },
-//   middleware: getDefaultMiddleware =>
-//     getDefaultMiddleware({
-//       serializableCheck: false,
-//     }),
-// });
-
-// export default store;
-
-// export type RootState = ReturnType<typeof store.getState>;
-// export type AppDispatch = typeof store.dispatch;
