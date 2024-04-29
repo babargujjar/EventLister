@@ -1,4 +1,16 @@
 export type Event = {
+  
+  participate: number;
+  adminPhoto: string;
+  adminName: string;
+  adminUid: any;
+  eventImageURL: string;
+  eventMapURL: string;
+  eventDate: any;
+  price: number;
+  eventName: string;
+  eventLocation:any;
+  eventType:string;
   EventAdminName: string;
   EventAdminPhoto: string;
   EventAdminUid: string;
@@ -11,6 +23,8 @@ export type Event = {
   EventPrice: string;
   EventType: string;
   id: any;
+  imageURI:string;
+  error:any
 };
 
 export type ItemEvent = {
