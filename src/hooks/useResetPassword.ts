@@ -1,20 +1,16 @@
-import {firebase} from '@react-native-firebase/firestore';
-import { useState } from 'react';
-import { ToastAndroid } from 'react-native';
+import {useState} from 'react';
+import {ToastAndroid} from 'react-native';
+import {useAppDispatch} from './hooks';
+import {resetPassword} from '../store/slice/EventsSlice';
 
 const useResetPassword = () => {
-      const [currentPass, setCurrentPass] = useState('');
+  const [currentPass, setCurrentPass] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
+  const dispatch = useAppDispatch();
 
-  const resetPassword = () => {
-        try {
-      const currentUser = firebase.auth().currentUser;
-      if (!currentUser) {
-        console.error('No user is currently logged in.');
-        return;
-      }
-
+  const resetPasswords = async () => {
+    try {
       if (!currentPass || !newPassword || !confirmPass) {
         ToastAndroid.show(
           'All password fields are required.',
@@ -22,7 +18,6 @@ const useResetPassword = () => {
         );
         return;
       }
-
       if (newPassword !== confirmPass) {
         ToastAndroid.show(
           'New password and confirm password must match.',
@@ -30,33 +25,9 @@ const useResetPassword = () => {
         );
         return;
       }
-
-      const userEmail = currentUser.email;
-      if (!userEmail) {
-        ToastAndroid.show('User email is not available!', ToastAndroid.SHORT);
-        return;
-      }
-
-      const emailCred = firebase.auth.EmailAuthProvider.credential(
-        userEmail,
-        currentPass,
-      );
-
-      currentUser
-        .reauthenticateWithCredential(emailCred)
-        .then(() => currentUser.updatePassword(newPassword))
-        .then(() =>
-          ToastAndroid.show(
-            'Password updated successfully!',
-            ToastAndroid.SHORT,
-          ),
-        )
-        .catch(error =>
-          ToastAndroid.show(
-            'Error updating password please try again later',
-            ToastAndroid.SHORT,
-          ),
-        );
+      ToastAndroid.show('good', ToastAndroid.SHORT);
+      console.log('first', {currentPass, newPassword});
+      await dispatch(resetPassword({currentPass, newPassword}));
     } catch (error) {
       ToastAndroid.show(
         'An error occurred try again later',
@@ -66,14 +37,14 @@ const useResetPassword = () => {
   };
 
   return {
-    resetPassword,
+    resetPasswords,
     currentPass,
     setCurrentPass,
     newPassword,
     setNewPassword,
     confirmPass,
-    setConfirmPass
-  }
-}
+    setConfirmPass,
+  };
+};
 
-export default useResetPassword
+export default useResetPassword;

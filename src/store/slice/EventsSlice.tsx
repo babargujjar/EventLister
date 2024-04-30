@@ -1,37 +1,18 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import {Event} from '../../constant/types';
+import {Event, EventPostingState, EventSliceState} from '../../constant/types';
+import {firebase} from '@react-native-firebase/firestore';
 import {ToastAndroid} from 'react-native';
 import auth from '@react-native-firebase/auth';
-const userData: any = auth()?.currentUser;
 
-interface initialState {
-  events: Event[];
-  event: Event[];
-  loading: boolean;
-  error: any;
-  updateProfile: any;
-}
-
-const initialState: initialState = {
+const initialState: EventSliceState = {
   events: [],
   event: [],
   loading: false,
   error: null,
   updateProfile: null,
 };
-
-export const setRealtimeEvents = (events: Event[]) => ({
-  type: 'events/setRealtimeEvents',
-  payload: events,
-});
-
-interface EventPostingState {
-  uploadingImage: boolean;
-  creatingEvent: boolean;
-  error: string | null;
-}
 
 const initialEventPostingState: EventPostingState = {
   uploadingImage: false,
@@ -118,51 +99,6 @@ export const myEvents = createAsyncThunk<Event[], string>(
   },
 );
 
-// export const updateProfile = createAsyncThunk(
-//   'events/updateProfile',
-//   async ({displayName, imageURI, setImageURI}: any) => {
-//     try {
-//       const userData: any = auth().currentUser;
-
-//       let imageUrl = userData.photoURL; 
-//       if (imageURI) {
-//         // Image upload to storage
-//         const imageRef = storage().ref(
-//           `profile_images/${userData.uid}_${Date.now()}`,
-//         );
-//         await imageRef.putFile(imageURI);
-//         imageUrl = await imageRef.getDownloadURL();
-//       }
-
-//       await userData.updateProfile({
-//         displayName: displayName || userData.displayName,
-//         photoURL: imageUrl,
-//       });
-//       ToastAndroid.show('start very', ToastAndroid.SHORT);
-
-//       setImageURI(imageUrl);
-//       const updatedUser = auth().currentUser;
-//       if (updatedUser) {
-//         await firestore()
-//           .collection('user')
-//           .doc(updatedUser.uid)
-//           .update({
-//             name: updatedUser.displayName,
-//             email: updatedUser.email,
-//             photoUrl: imageUrl || null,
-//             uid: updatedUser.uid,
-//           });
-//         ToastAndroid.show('Profile updated successfully!', ToastAndroid.SHORT);
-//       } else {
-//         ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
-//       }
-//     } catch (error) {
-//       console.error('Error updating profile:', error);
-//       ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
-//     }
-//   },
-// );
-
 export const updateProfile = createAsyncThunk(
   'events/updateProfile',
   async ({displayName, imageURI, setImageURI}: any) => {
@@ -172,11 +108,9 @@ export const updateProfile = createAsyncThunk(
         displayName: userData.displayName,
         photoURL: userData.photoURL,
       };
+      let imageUrl = currentUserData.photoURL;
 
-      // Check if displayName or imageURI is provided and upload the image if needed
-      let imageUrl = currentUserData.photoURL; // Default to current photoURL
       if (displayName !== currentUserData.displayName || imageURI) {
-        // Check if imageURI is provided and upload the image
         if (imageURI !== imageUrl) {
           const imageRef = storage().ref(
             `profile_images/${userData.uid}_${Date.now()}`,
@@ -185,7 +119,6 @@ export const updateProfile = createAsyncThunk(
           imageUrl = await imageRef.getDownloadURL();
         }
 
-        // Update displayName and photoURL in userData
         const updatedUserData = {
           displayName: displayName || currentUserData.displayName,
           photoURL: imageUrl,
@@ -194,7 +127,6 @@ export const updateProfile = createAsyncThunk(
         await userData.updateProfile(updatedUserData);
         setImageURI(imageUrl);
 
-        // Update user document in firestore
         const updatedUser = auth().currentUser;
         if (updatedUser) {
           await firestore()
@@ -208,12 +140,48 @@ export const updateProfile = createAsyncThunk(
             });
         }
       }
-
       ToastAndroid.show('Profile updated successfully!', ToastAndroid.SHORT);
     } catch (error) {
       console.error('Error updating profile:', error);
       ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
     }
+  },
+);
+
+export const resetPassword = createAsyncThunk(
+  'events/restPassword',
+  async ({currentPass, newPassword}: any) => {
+    try {
+      ToastAndroid.show('good one', ToastAndroid.SHORT);
+      const currentUser = firebase.auth().currentUser;
+      if (!currentUser) {
+        console.error('No user is currently logged in.');
+        return;
+      }
+      const userEmail = currentUser.email;
+      if (!userEmail) {
+        ToastAndroid.show('User email is not available!', ToastAndroid.SHORT);
+        return;
+      }
+
+      const emailCred = firebase.auth.EmailAuthProvider.credential(
+        userEmail,
+        currentPass,
+      );
+      ToastAndroid.show('good two', ToastAndroid.SHORT);
+      currentUser
+        .reauthenticateWithCredential(emailCred)
+        .then(() => currentUser.updatePassword(newPassword))
+        .then(() =>
+          ToastAndroid.show(
+            'Password updated successfully!',
+            ToastAndroid.SHORT,
+          ),
+        )
+        .catch(error =>
+          ToastAndroid.show('Invalid current password', ToastAndroid.SHORT),
+        );
+    } catch (error) {}
   },
 );
 
@@ -256,6 +224,7 @@ export const createEvent = createAsyncThunk(
     }
   },
 );
+
 
 const eventsSlice = createSlice({
   name: 'events',
@@ -307,6 +276,18 @@ const eventsSlice = createSlice({
         state.updateProfile = actoin.payload;
       })
       .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(resetPassword.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(resetPassword.fulfilled, state => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

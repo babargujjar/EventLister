@@ -14,7 +14,7 @@ import Button from '../../components/button/Button';
 
 const ResetPassword = ({navigation}: any) => {
   const {
-    resetPassword,
+    resetPasswords,
     currentPass,
     setCurrentPass,
     newPassword,
@@ -76,7 +76,7 @@ const ResetPassword = ({navigation}: any) => {
         </View>
         <Button
           style={ResetPasswordStyle.botton}
-          onPress={resetPassword}>
+          onPress={resetPasswords}>
           <Text style={[ResetPasswordStyle.bottontext, {color: '#FFFFFF'}]}>
             Reset Password
           </Text>

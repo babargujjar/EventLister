@@ -27,6 +27,20 @@ export type Event = {
   error:any
 };
 
+export type EventPostingState = {
+  uploadingImage: boolean;
+  creatingEvent: boolean;
+  error: string | null;
+}
+
+export type EventSliceState = {
+  events: Event[];
+  event: Event[];
+  loading: boolean;
+  error: any;
+  updateProfile: any;
+}
+
 export type ItemEvent = {
   item:Event
 }
