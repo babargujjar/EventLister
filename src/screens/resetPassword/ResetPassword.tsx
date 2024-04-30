@@ -5,12 +5,14 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import arrowleft from '../../assets/images/arrow-left.png';
 import ResetPasswordStyle from './ResetPasswordStyle';
 import useResetPassword from '../../hooks/useResetPassword';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
+import ProfileStyle from '../profile/ProfileStyle';
 
 const ResetPassword = ({navigation}: any) => {
   const {
@@ -21,6 +23,7 @@ const ResetPassword = ({navigation}: any) => {
     setNewPassword,
     confirmPass,
     setConfirmPass,
+    loading
   } = useResetPassword();
 
   return (
@@ -44,7 +47,11 @@ const ResetPassword = ({navigation}: any) => {
                 onChangeText={setCurrentPass}
                 placeholder="Old Password"
                 placeholderTextColor="#171B2E"
-                secureTextEntry={true} keyboardType={undefined} editable={undefined} autoCorrect={false}              />
+                secureTextEntry={true}
+                keyboardType={undefined}
+                editable={undefined}
+                autoCorrect={false}
+              />
             </View>
           </View>
           <View style={ResetPasswordStyle.inputview}>
@@ -56,7 +63,11 @@ const ResetPassword = ({navigation}: any) => {
                 onChangeText={setNewPassword}
                 placeholder="New Password"
                 placeholderTextColor="#171B2E"
-                secureTextEntry={true} keyboardType={undefined} editable={true} autoCorrect={false} />
+                secureTextEntry={true}
+                keyboardType={undefined}
+                editable={true}
+                autoCorrect={false}
+              />
             </View>
           </View>
           <View style={ResetPasswordStyle.inputview}>
@@ -70,13 +81,20 @@ const ResetPassword = ({navigation}: any) => {
                 onChangeText={setConfirmPass}
                 placeholder="Confirm New Password"
                 placeholderTextColor="#171B2E"
-                secureTextEntry={true} keyboardType={undefined} editable={true} autoCorrect={false}              />
+                secureTextEntry={true}
+                keyboardType={undefined}
+                editable={true}
+                autoCorrect={false}
+              />
             </View>
           </View>
         </View>
-        <Button
-          style={ResetPasswordStyle.botton}
-          onPress={resetPasswords}>
+        {loading && (
+          <View style={ProfileStyle.loaderContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
+        <Button style={ResetPasswordStyle.botton} onPress={resetPasswords}>
           <Text style={[ResetPasswordStyle.bottontext, {color: '#FFFFFF'}]}>
             Reset Password
           </Text>

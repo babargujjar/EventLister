@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import { ToastAndroid } from "react-native";
-import { launchImageLibrary } from "react-native-image-picker";
-import { CardProps} from "../constant/types";
-import firestore from "@react-native-firebase/firestore"
-
-
+import {useEffect, useState} from 'react';
+import {ToastAndroid} from 'react-native';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {CardProps} from '../constant/types';
+import {useAppDispatch} from './hooks';
+import {editEvent} from '../store/slice/EventsSlice';
 
 const options = [
   'Exhibition',
@@ -16,8 +15,7 @@ const options = [
   'Concert',
 ];
 
-const useEditEvent = ({param}:CardProps) => {
-
+const useEditEvent = ({param}: CardProps) => {
   const [eventName, setEventName] = useState('');
   const [price, setPrice] = useState('');
   const [eventDate, setEventDate] = useState('');
@@ -26,7 +24,9 @@ const useEditEvent = ({param}:CardProps) => {
   const [optionModel, setOptionModel] = useState(false);
   const [eventMapURL, setEventMapURL] = useState('');
   const [imageURI, setImageURI] = useState('');
-    const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const id = param.id;
 
   useEffect(() => {
     setEventName(param.EventName);
@@ -51,36 +51,26 @@ const useEditEvent = ({param}:CardProps) => {
       ToastAndroid.show('Please Enter all fields', ToastAndroid.SHORT);
       return;
     }
-setLoading(true)
-    try {
-      const updatedEventData = {
-        EventName: eventName,
-        EventPrice: price,
-        EventDate: eventDate,
-        EventLocation: eventLocation,
-        EventMapURL: eventMapURL,
-        EventImage: imageURI,
-        EventType: eventType,
-      };
-
-      await firestore()
-        .collection('events')
-        .doc(param.id)
-        .update(updatedEventData);
-        setLoading(false)
-      ToastAndroid.show('Event updated successfully!', ToastAndroid.SHORT);
-      setEventName('');
-          setPrice('');
-          setEventDate('');
-          setEventLocation('');
-          setEventType('');
-          setEventMapURL('');
-          setImageURI('');
-          setOptionModel(false);
-    } catch (error) {
-      console.error('Error updating event', error);
-      ToastAndroid.show('Error updating event please try again', ToastAndroid.SHORT);
-    }
+    setLoading(true);
+    const eventData = {
+      eventName,
+      price,
+      eventDate,
+      eventLocation,
+      eventMapURL,
+      imageURI,
+      eventType,
+      id,
+    };
+    await dispatch(editEvent({eventData}));
+    setEventName('');
+    setPrice('');
+    setEventDate('');
+    setEventLocation('');
+    setEventType('');
+    setEventMapURL('');
+    setImageURI('');
+    setLoading(false);
   };
 
   const handleSelectImage = () => {
@@ -100,27 +90,26 @@ setLoading(true)
 
   return {
     handleSelectImage,
-     eventDate,
-  setEventDate,
-  eventLocation,
-  setEventLocation,
-  eventMapURL,
-  setEventMapURL,
-  eventName,
-  setEventName,
-  eventType,
-  setEventType,
-  price,
-  setPrice,
-  optionModel,
-  setOptionModel,
-  options,
-  imageURI,
+    eventDate,
+    setEventDate,
+    eventLocation,
+    setEventLocation,
+    eventMapURL,
+    setEventMapURL,
+    eventName,
+    setEventName,
+    eventType,
+    setEventType,
+    price,
+    setPrice,
+    optionModel,
+    setOptionModel,
+    options,
+    imageURI,
     handleEditEvent,
     loading,
-    setLoading
-  }
-  
-}
+    setLoading,
+  };
+};
 
-export default useEditEvent
+export default useEditEvent;

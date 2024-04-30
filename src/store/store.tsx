@@ -5,6 +5,7 @@ import eventsReducer  from './slice/EventsSlice';
 import eventPostingReducer from "./slice/EventsSlice"
 import updateProfileReducer from "./slice/EventsSlice"
 import resetPasswordReducer from './slice/EventsSlice';
+import editEventReducer from './slice/EventsSlice';
  
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     myevents: eventsReducer,
     updateProfile: updateProfileReducer,
     resetPassword: resetPasswordReducer,
+    editEvent: editEventReducer,
   },
 });
 

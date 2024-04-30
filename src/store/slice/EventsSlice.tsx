@@ -226,6 +226,34 @@ export const createEvent = createAsyncThunk(
 );
 
 
+export const editEvent = createAsyncThunk('events/editEvent', async ({eventData}:any) => {
+  try {
+    const updatedEventData = {
+      EventName: eventData.eventName,
+      EventPrice: eventData.price,
+      EventDate: eventData.eventDate,
+      EventLocation: eventData.eventLocation,
+      EventMapURL: eventData.eventMapURL,
+      EventImage: eventData.imageURI,
+      EventType: eventData.eventType,
+    };
+
+    await firestore()
+      .collection('events')
+      .doc(eventData.id)
+      .update(updatedEventData);
+    ToastAndroid.show('Event updated successfully!', ToastAndroid.SHORT);
+    return
+  } catch (error) {
+    console.error('Error updating event', error);
+    ToastAndroid.show(
+      'Error updating event please try again',
+      ToastAndroid.SHORT,
+    );
+  }
+});
+
+
 const eventsSlice = createSlice({
   name: 'events',
   initialState,
@@ -290,7 +318,19 @@ const eventsSlice = createSlice({
       .addCase(resetPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(editEvent.pending, state => {
+         state.loading = true;
+         state.error = null;
+       })
+      .addCase(editEvent.fulfilled, state => {
+         state.loading = false;
+         state.error = null;
+       })
+      .addCase(editEvent.rejected, (state, action) => {
+         state.loading = false;
+         state.error = action.payload;
+       });
   },
 });
 

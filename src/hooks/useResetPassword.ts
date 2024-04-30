@@ -7,10 +7,12 @@ const useResetPassword = () => {
   const [currentPass, setCurrentPass] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
+  const [loading,setLoading] = useState(false)
   const dispatch = useAppDispatch();
 
   const resetPasswords = async () => {
     try {
+      setLoading(true)
       if (!currentPass || !newPassword || !confirmPass) {
         ToastAndroid.show(
           'All password fields are required.',
@@ -28,11 +30,14 @@ const useResetPassword = () => {
       ToastAndroid.show('good', ToastAndroid.SHORT);
       console.log('first', {currentPass, newPassword});
       await dispatch(resetPassword({currentPass, newPassword}));
+      setLoading(false)
     } catch (error) {
+      setLoading(true)
       ToastAndroid.show(
         'An error occurred try again later',
         ToastAndroid.SHORT,
       );
+      setLoading(false)
     }
   };
 
@@ -44,6 +49,7 @@ const useResetPassword = () => {
     setNewPassword,
     confirmPass,
     setConfirmPass,
+    loading
   };
 };
 
