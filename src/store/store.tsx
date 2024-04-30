@@ -3,7 +3,8 @@ import {LogOut, Signin, Signup, googleSignin} from './slice/authSlice';
 import fetchEventsSlice from './slice/EventsSlice';
 import eventsReducer  from './slice/EventsSlice';
 import eventPostingReducer from "./slice/EventsSlice"
-
+import updateProfileReducer from "./slice/EventsSlice"
+ 
 export const store = configureStore({
   reducer: {
     SignIn: Signin,
@@ -14,6 +15,7 @@ export const store = configureStore({
     events: eventsReducer,
     eventPosting: eventPostingReducer,
     myevents: eventsReducer,
+    updateProfile: updateProfileReducer,
   },
 });
 

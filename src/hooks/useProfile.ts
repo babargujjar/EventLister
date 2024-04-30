@@ -2,14 +2,14 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { LogOut } from '../store/slice/authSlice';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import { useEffect, useState } from 'react';
-import { ToastAndroid } from 'react-native';
-import storage from "@react-native-firebase/storage"
+import { Linking, PermissionsAndroid, ToastAndroid } from 'react-native';
+import { updateProfile } from '../store/slice/EventsSlice';
 
 const useProfile = () => {
 
   const dispatch = useAppDispatch();
+  const data = useAppSelector(state=>state.updateProfile.updateProfile)
   const [imageURI, setImageURI] = useState<string>('');
   const [displayName, setDisplayName] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -38,53 +38,65 @@ const useProfile = () => {
       }
     });
   };
+      const handleUpdateProfile = async () => {
+         try {
+           const granted = await PermissionsAndroid.request(
+             PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+             {
+               title: 'Storage Permission',
+               message: 'App needs access to your storage to update profile.',
+               buttonNeutral: 'Ask Me Later',
+               buttonNegative: 'Cancel',
+               buttonPositive: 'OK',
+             },
+           );
+           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            ToastAndroid.show("good",ToastAndroid.SHORT)
+             await updateprofile();
+           } else if (granted === PermissionsAndroid.RESULTS.DENIED) {
+             ToastAndroid.show(
+               'Storage permission denied. Profile update failed.',
+               ToastAndroid.SHORT,
+             );
+           } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+             ToastAndroid.show(
+               'Storage permission denied permanently. Please enable it from settings.',
+               ToastAndroid.LONG,
+             );
+             Linking.openSettings();
+           }
+         } catch (error) {
+           console.error('Error requesting storage permission:', error);
+           ToastAndroid.show(
+             'Error requesting storage permission. Profile update failed.',
+             ToastAndroid.SHORT,
+           );
+         }
+      };
 
-  const handleUpdateProfile = async () => {
-    try {
-       setLoading(true);
-      if (!userData) {
-        ToastAndroid.show('User data not available', ToastAndroid.SHORT);
-        return;
-      }
-const displayNameChanged = userData.displayName !== displayName;
-    const photoURLChanged = userData.photoURL !== imageURI;
 
-    if (!displayNameChanged && !photoURLChanged) {
-      ToastAndroid.show('Profile already updated', ToastAndroid.SHORT);
-      return;
-    }
-       // Image upload to storage
-    const imageRef = storage().ref(`profile_images/${userData.uid}_${Date.now()}`);
-    await imageRef.putFile(imageURI);
-    const imageUrl = await imageRef.getDownloadURL();
+      const updateprofile = async () => {
+        try {
+          if (!userData) {
+            ToastAndroid.show('User data not available', ToastAndroid.SHORT);
+            return;
+          }
+          const displayNameChanged = userData.displayName !== displayName;
+          const photoURLChanged = userData.photoURL !== imageURI;
 
-      await userData.updateProfile({
-        displayName: displayName,
-        photoURL: imageUrl,
-      });
-      setImageURI(imageUrl)
-      const updatedUser = auth().currentUser;
-      if (updatedUser) {
-        await firestore()
-          .collection('user')
-          .doc(updatedUser.uid)
-          .update({
-            name: updatedUser.displayName,
-            email: updatedUser.email,
-            photoUrl: imageUrl || null,
-            uid: updatedUser.uid,
-          });
-        ToastAndroid.show('Profile updated successfully!', ToastAndroid.SHORT);
-      } else {
-        ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
-      }
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
-    } finally {
-      setLoading(false); // Loader ko hide karo
-    }
-  };
+          if (!displayNameChanged && !photoURLChanged) {
+            ToastAndroid.show('Profile already updated', ToastAndroid.SHORT);
+            return;
+          }
+          console.log('first', displayName, imageURI);
+          // Image upload to storage
+        ToastAndroid.show('good very', ToastAndroid.SHORT);
+         await dispatch(updateProfile({displayName, imageURI, setImageURI}));
+        } catch (error) {
+          console.error('Error updating profile:', error);
+          ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
+        }
+      };
 
   const logout = async () => {
     dispatch(LogOut());

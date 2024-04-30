@@ -1,27 +1,31 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import { Event } from '../../constant/types';
-import { ToastAndroid } from 'react-native';
+import {Event} from '../../constant/types';
+import {ToastAndroid} from 'react-native';
+import auth from '@react-native-firebase/auth';
+const userData: any = auth()?.currentUser;
 
 interface initialState {
   events: Event[];
   event: Event[];
   loading: boolean;
   error: any;
-};
+  updateProfile: any;
+}
 
-const initialState : initialState =  {
-  events: [] ,
+const initialState: initialState = {
+  events: [],
+  event: [],
   loading: false,
   error: null,
-}
+  updateProfile: null,
+};
 
 export const setRealtimeEvents = (events: Event[]) => ({
   type: 'events/setRealtimeEvents',
   payload: events,
 });
-
 
 interface EventPostingState {
   uploadingImage: boolean;
@@ -34,7 +38,6 @@ const initialEventPostingState: EventPostingState = {
   creatingEvent: false,
   error: null,
 };
-
 
 export const fetchEvents = createAsyncThunk<Event[]>(
   'events/fetchEvents',
@@ -99,7 +102,7 @@ export const myEvents = createAsyncThunk<Event[], string>(
           "You haven't created any events yet. Get started by creating your first event!",
           ToastAndroid.LONG,
         );
-        return []
+        return [];
       }
 
       const eventsData: Event[] = [];
@@ -108,16 +111,116 @@ export const myEvents = createAsyncThunk<Event[], string>(
       });
 
       return eventsData;
-    } catch (error:any) {
+    } catch (error: any) {
       console.error('Error fetching events:', error);
       return rejectWithValue(error.message);
     }
   },
 );
 
+// export const updateProfile = createAsyncThunk(
+//   'events/updateProfile',
+//   async ({displayName, imageURI, setImageURI}: any) => {
+//     try {
+//       const userData: any = auth().currentUser;
+
+//       let imageUrl = userData.photoURL; 
+//       if (imageURI) {
+//         // Image upload to storage
+//         const imageRef = storage().ref(
+//           `profile_images/${userData.uid}_${Date.now()}`,
+//         );
+//         await imageRef.putFile(imageURI);
+//         imageUrl = await imageRef.getDownloadURL();
+//       }
+
+//       await userData.updateProfile({
+//         displayName: displayName || userData.displayName,
+//         photoURL: imageUrl,
+//       });
+//       ToastAndroid.show('start very', ToastAndroid.SHORT);
+
+//       setImageURI(imageUrl);
+//       const updatedUser = auth().currentUser;
+//       if (updatedUser) {
+//         await firestore()
+//           .collection('user')
+//           .doc(updatedUser.uid)
+//           .update({
+//             name: updatedUser.displayName,
+//             email: updatedUser.email,
+//             photoUrl: imageUrl || null,
+//             uid: updatedUser.uid,
+//           });
+//         ToastAndroid.show('Profile updated successfully!', ToastAndroid.SHORT);
+//       } else {
+//         ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
+//       }
+//     } catch (error) {
+//       console.error('Error updating profile:', error);
+//       ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
+//     }
+//   },
+// );
+
+export const updateProfile = createAsyncThunk(
+  'events/updateProfile',
+  async ({displayName, imageURI, setImageURI}: any) => {
+    try {
+      const userData: any = auth().currentUser;
+      const currentUserData: any = {
+        displayName: userData.displayName,
+        photoURL: userData.photoURL,
+      };
+
+      // Check if displayName or imageURI is provided and upload the image if needed
+      let imageUrl = currentUserData.photoURL; // Default to current photoURL
+      if (displayName !== currentUserData.displayName || imageURI) {
+        // Check if imageURI is provided and upload the image
+        if (imageURI !== imageUrl) {
+          const imageRef = storage().ref(
+            `profile_images/${userData.uid}_${Date.now()}`,
+          );
+          await imageRef.putFile(imageURI);
+          imageUrl = await imageRef.getDownloadURL();
+        }
+
+        // Update displayName and photoURL in userData
+        const updatedUserData = {
+          displayName: displayName || currentUserData.displayName,
+          photoURL: imageUrl,
+        };
+
+        await userData.updateProfile(updatedUserData);
+        setImageURI(imageUrl);
+
+        // Update user document in firestore
+        const updatedUser = auth().currentUser;
+        if (updatedUser) {
+          await firestore()
+            .collection('user')
+            .doc(updatedUser.uid)
+            .update({
+              name: updatedUser.displayName,
+              email: updatedUser.email,
+              photoUrl: imageUrl || null,
+              uid: updatedUser.uid,
+            });
+        }
+      }
+
+      ToastAndroid.show('Profile updated successfully!', ToastAndroid.SHORT);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
+    }
+  },
+);
+
+
 export const createEvent = createAsyncThunk(
   'events/createEvent',
-  async (eventData:Event, { rejectWithValue }) => {
+  async (eventData: Event, {rejectWithValue}) => {
     try {
       if (
         !eventData.eventName ||
@@ -132,7 +235,7 @@ export const createEvent = createAsyncThunk(
         return;
       }
       const docRef = await firestore().collection('events').add({
-        EventName:eventData.eventName,
+        EventName: eventData.eventName,
         EventPrice: eventData.price,
         EventDate: eventData.eventDate,
         EventLocation: eventData.eventLocation,
@@ -144,16 +247,15 @@ export const createEvent = createAsyncThunk(
         EventParticipate: eventData.participate,
         EventType: eventData.eventType,
       });
-      console.log('eventcreate')
-       const eventId = docRef.id;
-       return eventId;
-    } catch (error:any) {
+      console.log('eventcreate');
+      const eventId = docRef.id;
+      return eventId;
+    } catch (error: any) {
       console.error('Error creatings event:', error);
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
-
 
 const eventsSlice = createSlice({
   name: 'events',
@@ -194,12 +296,22 @@ const eventsSlice = createSlice({
       .addCase(myEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+      .addCase(updateProfile.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, actoin) => {
+        state.loading = false;
+        state.error = null;
+        state.updateProfile = actoin.payload;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-
 export const eventsActions = eventsSlice.actions;
 export default eventsSlice.reducer;
-
-

@@ -1,7 +1,6 @@
 import { ToastAndroid } from 'react-native'
 import { useEffect, useState } from 'react'
 import auth from "@react-native-firebase/auth"
-import firestore from "@react-native-firebase/firestore"
 import { useAppDispatch, useAppSelector } from './hooks'
 import { myEvents } from '../store/slice/EventsSlice'
 
@@ -36,7 +35,7 @@ const useMyPosting = () => {
   useEffect(() => {
     if (Array.isArray(data)) {
       // Check if events is an array
-      setUserEvents([...data]);
+      setUserEvents([...data]as any);
     } else {
       setUserEvents([]); // If events is not an array, set an empty array
     }

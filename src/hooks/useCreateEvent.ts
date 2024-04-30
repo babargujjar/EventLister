@@ -1,5 +1,4 @@
 import {launchImageLibrary} from 'react-native-image-picker';
-import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {useEffect, useState} from 'react';
 import {ToastAndroid} from 'react-native';
