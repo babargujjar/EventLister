@@ -99,6 +99,55 @@ export const myEvents = createAsyncThunk<Event[], string>(
   },
 );
 
+// export const updateProfile = createAsyncThunk(
+//   'events/updateProfile',
+//   async ({displayName, imageURI, setImageURI}: any) => {
+//     try {
+//       const userData: any = auth().currentUser;
+//       const currentUserData: any = {
+//         displayName: userData.displayName,
+//         photoURL: userData.photoURL,
+//       };
+//       let imageUrl = currentUserData.photoURL;
+
+//       if (displayName !== currentUserData.displayName || imageURI) {
+//         if (imageURI !== imageUrl) {
+//           const imageRef = storage().ref(
+//             `profile_images/${userData.uid}_${Date.now()}`,
+//           );
+//           await imageRef.putFile(imageURI);
+//           imageUrl = await imageRef.getDownloadURL();
+//         }
+
+//         const updatedUserData = {
+//           displayName: displayName || currentUserData.displayName,
+//           photoURL: imageUrl,
+//         };
+
+//         await userData.updateProfile(updatedUserData);
+//         setImageURI(imageUrl);
+
+//         const updatedUser = auth().currentUser;
+//         if (updatedUser) {
+//           await firestore()
+//             .collection('user')
+//             .doc(updatedUser.uid)
+//             .update({
+//               name: updatedUser.displayName,
+//               email: updatedUser.email,
+//               photoUrl: imageUrl || null,
+//               uid: updatedUser.uid,
+//             });
+//         }
+//       }
+//       ToastAndroid.show('Profile updated successfully!', ToastAndroid.SHORT);
+//     } catch (error) {
+//       console.error('Error updating profile:', error);
+//       ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
+//     }
+//   },
+// );
+
 export const updateProfile = createAsyncThunk(
   'events/updateProfile',
   async ({displayName, imageURI, setImageURI}: any) => {
@@ -110,20 +159,21 @@ export const updateProfile = createAsyncThunk(
       };
       let imageUrl = currentUserData.photoURL;
 
-      if (displayName !== currentUserData.displayName || imageURI) {
-        if (imageURI !== imageUrl) {
+      if (
+        displayName !== currentUserData.displayName ||
+        (imageURI && !imageURI.startsWith('https://'))
+      ) {
+        if (imageURI && imageURI.startsWith('file://')) {
           const imageRef = storage().ref(
             `profile_images/${userData.uid}_${Date.now()}`,
           );
           await imageRef.putFile(imageURI);
           imageUrl = await imageRef.getDownloadURL();
         }
-
         const updatedUserData = {
           displayName: displayName || currentUserData.displayName,
           photoURL: imageUrl,
         };
-
         await userData.updateProfile(updatedUserData);
         setImageURI(imageUrl);
 
@@ -147,6 +197,7 @@ export const updateProfile = createAsyncThunk(
     }
   },
 );
+
 
 export const resetPassword = createAsyncThunk(
   'events/restPassword',
@@ -234,8 +285,11 @@ export const editEvent = createAsyncThunk('events/editEvent', async ({eventData}
       EventDate: eventData.eventDate,
       EventLocation: eventData.eventLocation,
       EventMapURL: eventData.eventMapURL,
-      EventImage: eventData.imageURI,
+      EventImage: eventData.eventImageURL,
       EventType: eventData.eventType,
+      EventAdminUid: eventData.adminUid,
+      EventAdminName: eventData.adminName,
+      EventAdminPhoto: eventData.adminPhoto,
     };
 
     await firestore()

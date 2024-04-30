@@ -2,7 +2,9 @@ import {useEffect, useState} from 'react';
 import {ToastAndroid} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {CardProps} from '../constant/types';
+import storage from '@react-native-firebase/storage';
 import {useAppDispatch} from './hooks';
+import auth from '@react-native-firebase/auth';
 import {editEvent} from '../store/slice/EventsSlice';
 
 const options = [
@@ -25,6 +27,9 @@ const useEditEvent = ({param}: CardProps) => {
   const [eventMapURL, setEventMapURL] = useState('');
   const [imageURI, setImageURI] = useState('');
   const [loading, setLoading] = useState(false);
+    const adminName = auth().currentUser?.displayName;
+    const adminPhoto = auth().currentUser?.photoURL;
+    const adminUid = auth().currentUser?.uid;
   const dispatch = useAppDispatch();
   const id = param.id;
 
@@ -37,6 +42,23 @@ const useEditEvent = ({param}: CardProps) => {
     setEventMapURL(param.EventMapURL);
     setImageURI(param.EventImage);
   }, [param]);
+
+    const uploadImageToStorageAndGetDownloadURL = async (
+      imageURII: string,
+    ): Promise<string> => {
+      try {
+        const response = await fetch(imageURII);
+        const blob = await response.blob();
+        const imageName = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+        const imageRef = storage().ref(`event_images/${imageName}`);
+        await imageRef.put(blob);
+        const downloadURL = await imageRef.getDownloadURL();
+        return downloadURL;
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        throw new Error('Error uploading image');
+      }
+    };
 
   const handleEditEvent = async () => {
     if (
@@ -52,15 +74,27 @@ const useEditEvent = ({param}: CardProps) => {
       return;
     }
     setLoading(true);
+     let imageURII = imageURI;
+
+     let eventImageURL = '';
+
+     if (imageURII.startsWith('file://')) {
+       eventImageURL = await uploadImageToStorageAndGetDownloadURL(imageURII);
+     } else if (imageURI) {
+       eventImageURL = imageURI;
+     }
     const eventData = {
       eventName,
       price,
       eventDate,
       eventLocation,
       eventMapURL,
-      imageURI,
+      eventImageURL,
       eventType,
       id,
+      adminName,
+      adminPhoto,
+      adminUid,
     };
     await dispatch(editEvent({eventData}));
     setEventName('');

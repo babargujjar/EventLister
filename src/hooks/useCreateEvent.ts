@@ -105,7 +105,6 @@ const Data = useAppSelector(state => state.events.events);
 
       setLoading(false);
       ToastAndroid.show('Event created successfully!', ToastAndroid.SHORT);
-      console.log('Data', Data)
      setEvents([...Data]);
       setEventDate('');
       setImageURI('');
