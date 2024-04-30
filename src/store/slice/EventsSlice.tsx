@@ -1,10 +1,11 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk,PayloadAction} from '@reduxjs/toolkit';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {Event, EventPostingState, EventSliceState} from '../../constant/types';
 import {firebase} from '@react-native-firebase/firestore';
 import {ToastAndroid} from 'react-native';
 import auth from '@react-native-firebase/auth';
+
 
 const initialState: EventSliceState = {
   events: [],
@@ -22,7 +23,7 @@ const initialEventPostingState: EventPostingState = {
 
 export const fetchEvents = createAsyncThunk<Event[]>(
   'events/fetchEvents',
-  async () => {
+  async (_,{dispatch}) => {
     const eventsRef = firestore().collection('events');
 
     return new Promise((resolve, reject) => {
@@ -55,6 +56,7 @@ export const fetchEvents = createAsyncThunk<Event[]>(
             }
             eventData.push({id: doc.id, ...event} as Event);
           });
+          dispatch(eventsSlice.actions.fetchEventsFullfilled(eventData))
           resolve(eventData);
         },
         error => {
@@ -68,30 +70,69 @@ export const fetchEvents = createAsyncThunk<Event[]>(
   },
 );
 
+
+// export const myEvents = createAsyncThunk<Event[], string>(
+//   'events/myEvents',
+//   async (user, {rejectWithValue}) => {
+//     try {
+//       const eventsRef = firestore()
+//         .collection('events')
+//         .where('EventAdminUid', '==', user);
+
+//       const snapshot = await eventsRef.get();
+
+//       if (snapshot.empty) {
+//         ToastAndroid.show(
+//           "You haven't created any events yet. Get started by creating your first event!",
+//           ToastAndroid.LONG,
+//         );
+//         return [];
+//       }
+
+//       const eventsData: Event[] = [];
+//       snapshot.forEach(doc => {
+//         eventsData.push({id: doc.id, ...doc.data()} as Event);
+//       });
+
+//       return eventsData;
+//     } catch (error: any) {
+//       console.error('Error fetching events:', error);
+//       return rejectWithValue(error.message);
+//     }
+//   },
+// );
+
 export const myEvents = createAsyncThunk<Event[], string>(
   'events/myEvents',
-  async (user, {rejectWithValue}) => {
+  async (user, {rejectWithValue,dispatch}:any) => {
     try {
       const eventsRef = firestore()
         .collection('events')
         .where('EventAdminUid', '==', user);
 
-      const snapshot = await eventsRef.get();
+      const unsubscribe = eventsRef.onSnapshot(
+        snapshot => {
+          const eventsData: Event[] = [];
+          snapshot.forEach(doc => {
+            eventsData.push({id: doc.id, ...doc.data()} as Event);
+          });
 
-      if (snapshot.empty) {
-        ToastAndroid.show(
-          "You haven't created any events yet. Get started by creating your first event!",
-          ToastAndroid.LONG,
-        );
-        return [];
-      }
+          if (eventsData.length === 0) {
+            ToastAndroid.show(
+              "You haven't created any events yet. Get started by creating your first event!",
+              ToastAndroid.LONG,
+            );
+          }
 
-      const eventsData: Event[] = [];
-      snapshot.forEach(doc => {
-        eventsData.push({id: doc.id, ...doc.data()} as Event);
-      });
+          dispatch(eventsSlice.actions.fetchMyEventsFullfilled(eventsData));
+        },
+        error => {
+          console.error('Error fetching events:', error);
+          rejectWithValue(error.message);
+        },
+      );
 
-      return eventsData;
+      return unsubscribe;
     } catch (error: any) {
       console.error('Error fetching events:', error);
       return rejectWithValue(error.message);
@@ -99,54 +140,7 @@ export const myEvents = createAsyncThunk<Event[], string>(
   },
 );
 
-// export const updateProfile = createAsyncThunk(
-//   'events/updateProfile',
-//   async ({displayName, imageURI, setImageURI}: any) => {
-//     try {
-//       const userData: any = auth().currentUser;
-//       const currentUserData: any = {
-//         displayName: userData.displayName,
-//         photoURL: userData.photoURL,
-//       };
-//       let imageUrl = currentUserData.photoURL;
 
-//       if (displayName !== currentUserData.displayName || imageURI) {
-//         if (imageURI !== imageUrl) {
-//           const imageRef = storage().ref(
-//             `profile_images/${userData.uid}_${Date.now()}`,
-//           );
-//           await imageRef.putFile(imageURI);
-//           imageUrl = await imageRef.getDownloadURL();
-//         }
-
-//         const updatedUserData = {
-//           displayName: displayName || currentUserData.displayName,
-//           photoURL: imageUrl,
-//         };
-
-//         await userData.updateProfile(updatedUserData);
-//         setImageURI(imageUrl);
-
-//         const updatedUser = auth().currentUser;
-//         if (updatedUser) {
-//           await firestore()
-//             .collection('user')
-//             .doc(updatedUser.uid)
-//             .update({
-//               name: updatedUser.displayName,
-//               email: updatedUser.email,
-//               photoUrl: imageUrl || null,
-//               uid: updatedUser.uid,
-//             });
-//         }
-//       }
-//       ToastAndroid.show('Profile updated successfully!', ToastAndroid.SHORT);
-//     } catch (error) {
-//       console.error('Error updating profile:', error);
-//       ToastAndroid.show('Failed to update profile', ToastAndroid.SHORT);
-//     }
-//   },
-// );
 
 export const updateProfile = createAsyncThunk(
   'events/updateProfile',
@@ -311,7 +305,14 @@ export const editEvent = createAsyncThunk('events/editEvent', async ({eventData}
 const eventsSlice = createSlice({
   name: 'events',
   initialState,
-  reducers: {},
+  reducers: {
+    fetchEventsFullfilled:(state,action:PayloadAction<Event[]>)=>{
+      state.events = action.payload
+    },
+    fetchMyEventsFullfilled:(state,action:PayloadAction<Event[]>)=>{
+      state.event = action.payload
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchEvents.pending, state => {
@@ -374,17 +375,17 @@ const eventsSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(editEvent.pending, state => {
-         state.loading = true;
-         state.error = null;
-       })
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(editEvent.fulfilled, state => {
-         state.loading = false;
-         state.error = null;
-       })
+        state.loading = false;
+        state.error = null;
+      })
       .addCase(editEvent.rejected, (state, action) => {
-         state.loading = false;
-         state.error = action.payload;
-       });
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
