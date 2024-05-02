@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import React from 'react';
 import editimg from '../../assets/images/Discoveryfocused.png';
-import images from '../../assets/images/images.jpg';
 import ProfileStyle from './ProfileStyle';
 import useProfile from '../../hooks/useProfile';
 import Input from '../../components/input/Input';

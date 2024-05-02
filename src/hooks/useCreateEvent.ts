@@ -112,10 +112,7 @@ const Data = useAppSelector(state => state.events.events);
       setEventMapURL('');
       setPrice('');
       setEventName('');
-      setEventType('');
-
-      
-       
+      setEventType('');  
     } catch (error) {
       console.error('Error creating event:', error);
       ToastAndroid.show('Error creating event', ToastAndroid.SHORT);

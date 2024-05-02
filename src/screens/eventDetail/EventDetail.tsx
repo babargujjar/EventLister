@@ -10,7 +10,7 @@ import Button from '../../components/button/Button';
 
 const EventDetail = ({navigation, route}: any) => {
   const {param} = route.params;
-  const {openMap, addParticipate, Accountimg, concertimg} = useEventDetail({
+  const {openMap, Accountimg, concertimg} = useEventDetail({
     param,
   });
 
@@ -73,7 +73,6 @@ const EventDetail = ({navigation, route}: any) => {
             </TouchableOpacity>
           </View>
           <Button
-            onPress={addParticipate}
             style={EventDetailStyle.botton}>
             <Text style={EventDetailStyle.bottontext}>Buy Ticket</Text>
           </Button>

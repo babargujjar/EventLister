@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import React from 'react';
 import Upload from '../../assets/images/Upload.png';
-import {FlatList} from 'react-native-gesture-handler';
 import Arrow from '../../assets/images/ArrowRight.png';
 import {CardProp} from '../../constant/types';
 import EditEventStyle from './EditEventStyle';

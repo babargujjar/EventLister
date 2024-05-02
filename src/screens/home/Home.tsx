@@ -11,13 +11,10 @@ import React from 'react';
 import filter from '../../assets/images/Filter.png';
 import search from '../../assets/images/Search.png';
 import Card from '../../components/card/Card';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import Arrow from '../../assets/images/ArrowRight.png';
 import HomeStyle from './HomeStyle';
 import useHome from '../../hooks/useHome';
 import images from '../../assets/images/images.jpg';
 import blank from '../../assets/images/blank.jpg';
-import Input from '../../components/input/Input';
 import FilterModal from '../../components/filterModal/FilterModal';
 
 const Home = ({navigation}: any) => {

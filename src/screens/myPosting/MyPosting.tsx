@@ -15,7 +15,6 @@ import useMyPosting from '../../hooks/useMyPosting';
 
 const MyPosting = ({navigation}: any) => {
   const renderEventCard = ({item}: ItemEvent) => {
-    // console.log('item', item)
     return userEvents ? (
       <TouchableOpacity
         activeOpacity={0.7}
