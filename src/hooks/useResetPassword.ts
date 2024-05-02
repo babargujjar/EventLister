@@ -27,8 +27,6 @@ const useResetPassword = () => {
         );
         return;
       }
-      ToastAndroid.show('good', ToastAndroid.SHORT);
-      console.log('first', {currentPass, newPassword});
       await dispatch(resetPassword({currentPass, newPassword}));
       setLoading(false)
     } catch (error) {

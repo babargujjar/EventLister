@@ -71,37 +71,6 @@ export const fetchEvents = createAsyncThunk<Event[]>(
 );
 
 
-// export const myEvents = createAsyncThunk<Event[], string>(
-//   'events/myEvents',
-//   async (user, {rejectWithValue}) => {
-//     try {
-//       const eventsRef = firestore()
-//         .collection('events')
-//         .where('EventAdminUid', '==', user);
-
-//       const snapshot = await eventsRef.get();
-
-//       if (snapshot.empty) {
-//         ToastAndroid.show(
-//           "You haven't created any events yet. Get started by creating your first event!",
-//           ToastAndroid.LONG,
-//         );
-//         return [];
-//       }
-
-//       const eventsData: Event[] = [];
-//       snapshot.forEach(doc => {
-//         eventsData.push({id: doc.id, ...doc.data()} as Event);
-//       });
-
-//       return eventsData;
-//     } catch (error: any) {
-//       console.error('Error fetching events:', error);
-//       return rejectWithValue(error.message);
-//     }
-//   },
-// );
-
 export const myEvents = createAsyncThunk<Event[], string>(
   'events/myEvents',
   async (user, {rejectWithValue,dispatch}:any) => {
@@ -139,7 +108,6 @@ export const myEvents = createAsyncThunk<Event[], string>(
     }
   },
 );
-
 
 
 export const updateProfile = createAsyncThunk(
@@ -197,7 +165,6 @@ export const resetPassword = createAsyncThunk(
   'events/restPassword',
   async ({currentPass, newPassword}: any) => {
     try {
-      ToastAndroid.show('good one', ToastAndroid.SHORT);
       const currentUser = firebase.auth().currentUser;
       if (!currentUser) {
         console.error('No user is currently logged in.');
@@ -213,7 +180,6 @@ export const resetPassword = createAsyncThunk(
         userEmail,
         currentPass,
       );
-      ToastAndroid.show('good two', ToastAndroid.SHORT);
       currentUser
         .reauthenticateWithCredential(emailCred)
         .then(() => currentUser.updatePassword(newPassword))
