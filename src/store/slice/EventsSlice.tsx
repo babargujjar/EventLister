@@ -226,7 +226,6 @@ export const createEvent = createAsyncThunk(
         EventParticipate: eventData.participate,
         EventType: eventData.eventType,
       });
-      console.log('eventcreate');
       const eventId = docRef.id;
       return eventId;
     } catch (error: any) {

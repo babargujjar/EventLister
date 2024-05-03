@@ -12,7 +12,6 @@ const useMyPosting = () => {
   const dispatch = useAppDispatch()
   const data = useAppSelector(state=>state.myevents.event)
   const currentuser = auth().currentUser
-  // console.log('data', data)
 
 
   useEffect(() => {

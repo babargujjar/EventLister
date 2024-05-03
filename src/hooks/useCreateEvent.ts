@@ -83,7 +83,6 @@ const Data = useAppSelector(state => state.events.events);
       if (imageURII.startsWith('file://')) {
         eventImageURL = await uploadImageToStorageAndGetDownloadURL(imageURII);
       }
-      console.log('eventImageURL', eventImageURL)
 
       const eventData = {
         eventName,
@@ -99,7 +98,6 @@ const Data = useAppSelector(state => state.events.events);
         eventImageURL,
       };
 
-      console.log('good job', eventData);
 
       await dispatch(createEvent(eventData as any));
 
